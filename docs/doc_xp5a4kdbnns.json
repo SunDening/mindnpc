@@ -1,0 +1,482 @@
+{
+  "id": "doc_xp5a4kdbnns",
+  "app": "MindNPC",
+  "version": 1,
+  "title": "实习突击",
+  "layout": "both",
+  "root": {
+    "id": "no2jql07nns",
+    "text": "实习突击",
+    "note": "",
+    "collapsed": false,
+    "children": [
+      {
+        "id": "nld1vfubveq",
+        "text": "简历",
+        "note": "",
+        "collapsed": false,
+        "children": [
+          {
+            "id": "n0hddmyq7yj",
+            "text": "投递：海投",
+            "note": "",
+            "collapsed": false,
+            "children": [
+              {
+                "id": "nju0laopdgo",
+                "text": "先投小厂",
+                "note": "",
+                "collapsed": false,
+                "children": []
+              },
+              {
+                "id": "nfpustdpiu3",
+                "text": "再投不想去的厂",
+                "note": "",
+                "collapsed": false,
+                "children": []
+              },
+              {
+                "id": "nvow7xsnoa9",
+                "text": "最后投想去的厂",
+                "note": "",
+                "collapsed": false,
+                "children": []
+              }
+            ]
+          },
+          {
+            "id": "nsuus639lf5",
+            "text": "内容：埋钩子",
+            "note": "<p>努力让面试官提出我们想回答（准备过）的问题。</p><p>准备合适的话术。</p>",
+            "collapsed": false,
+            "children": [
+              {
+                "id": "ne905lczr45",
+                "text": "面试题",
+                "note": "",
+                "collapsed": false,
+                "children": [
+                  {
+                    "id": "n0jm6d1x17o",
+                    "text": "AI押题",
+                    "note": "",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "n3jmjht16me",
+                    "text": "面经",
+                    "note": "",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "nydw95c48au",
+                    "text": "不断面试，不断积累",
+                    "note": "",
+                    "collapsed": false,
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "naynv7rovpx",
+                "text": "语言",
+                "note": "",
+                "collapsed": false,
+                "children": [
+                  {
+                    "id": "nwb4tezh1p9",
+                    "text": "大多数公司接受转语言",
+                    "note": "",
+                    "collapsed": false,
+                    "children": [],
+                    "summaries": [],
+                    "boundaries": []
+                  }
+                ],
+                "summaries": [],
+                "boundaries": []
+              },
+              {
+                "id": "n7ptd3xi4cl",
+                "text": "优先级",
+                "note": "",
+                "collapsed": false,
+                "children": [
+                  {
+                    "id": "nqh15wgema8",
+                    "text": "学历：",
+                    "note": "",
+                    "collapsed": false,
+                    "children": [],
+                    "summaries": [],
+                    "boundaries": []
+                  },
+                  {
+                    "id": "nxhnjyfurh8",
+                    "text": "实习 >> 项目 > 技术栈",
+                    "note": "<ol><li>有实习问实习；</li><li>没实习问项目；</li><li>项目烂大街或完全不匹配才问八股，拷打技术栈深度和广度；</li></ol>",
+                    "collapsed": false,
+                    "children": [],
+                    "summaries": [],
+                    "boundaries": []
+                  }
+                ],
+                "summaries": [],
+                "boundaries": []
+              },
+              {
+                "id": "ndz2e49yfh9",
+                "text": "不写",
+                "note": "",
+                "collapsed": false,
+                "children": [
+                  {
+                    "id": "nk8w9bw1itb",
+                    "text": "个人性格",
+                    "note": "",
+                    "collapsed": false,
+                    "children": [],
+                    "summaries": [],
+                    "boundaries": []
+                  },
+                  {
+                    "id": "nk9ickl3mo2",
+                    "text": "学习课程",
+                    "note": "",
+                    "collapsed": false,
+                    "children": [],
+                    "summaries": [],
+                    "boundaries": []
+                  },
+                  {
+                    "id": "ngq9ugavqgx",
+                    "text": "学校实验大作业",
+                    "note": "",
+                    "collapsed": false,
+                    "children": [],
+                    "summaries": [],
+                    "boundaries": []
+                  }
+                ],
+                "summaries": [],
+                "boundaries": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "nsa7gwjla0c",
+        "text": "项目",
+        "note": "",
+        "collapsed": false,
+        "children": [
+          {
+            "id": "nuw3ofsgk7y",
+            "text": "优先级",
+            "note": "",
+            "collapsed": false,
+            "children": [
+              {
+                "id": "nsuv8jthnqg",
+                "text": "关于项目的思考 > 项目本身是什么",
+                "note": "",
+                "collapsed": false,
+                "children": [],
+                "summaries": [],
+                "boundaries": []
+              }
+            ],
+            "summaries": [],
+            "boundaries": []
+          },
+          {
+            "id": "n7gh0huc6dr",
+            "text": "最具性价比路线",
+            "note": "",
+            "collapsed": false,
+            "children": [
+              {
+                "id": "nntsnln8bh3",
+                "text": "买一个成熟不烂大街的项目和文档，再二次包装",
+                "note": "",
+                "collapsed": false,
+                "children": [],
+                "summaries": [],
+                "boundaries": []
+              },
+              {
+                "id": "n097wiu8x0b",
+                "text": "推荐后端为主又大量涉及 AI/Agent 的项目",
+                "note": "",
+                "collapsed": false,
+                "children": [],
+                "summaries": [],
+                "boundaries": []
+              }
+            ],
+            "summaries": [],
+            "boundaries": []
+          },
+          {
+            "id": "niq7i0ddiwc",
+            "text": "项目亮点发掘",
+            "note": "",
+            "collapsed": false,
+            "children": [
+              {
+                "id": "n7s7zdnoqj1",
+                "text": "这个技术栈是什么，大致怎么用，为什么用",
+                "note": "",
+                "collapsed": false,
+                "children": [],
+                "summaries": [],
+                "boundaries": []
+              },
+              {
+                "id": "n6ndngukao5",
+                "text": "什么背景，基于项目背景为什么偏偏用这个选型",
+                "note": "",
+                "collapsed": false,
+                "children": [],
+                "summaries": [],
+                "boundaries": []
+              },
+              {
+                "id": "nutv4f36uo1",
+                "text": "具体的解决流程",
+                "note": "",
+                "collapsed": false,
+                "children": [],
+                "summaries": [],
+                "boundaries": []
+              },
+              {
+                "id": "nhnlm1b4yvm",
+                "text": "各种特殊情况下的可能的兜底策略",
+                "note": "",
+                "collapsed": false,
+                "children": [],
+                "summaries": [],
+                "boundaries": []
+              },
+              {
+                "id": "n4iv2qnqeuz",
+                "text": "真正的需求，实际产出成果",
+                "note": "",
+                "collapsed": false,
+                "children": [],
+                "summaries": [],
+                "boundaries": []
+              },
+              {
+                "id": "n2uch5n4orw",
+                "text": "同类问题解决方案的一套方法论",
+                "note": "",
+                "collapsed": false,
+                "children": [],
+                "summaries": [],
+                "boundaries": []
+              }
+            ],
+            "summaries": [],
+            "boundaries": []
+          }
+        ],
+        "summaries": [],
+        "boundaries": []
+      },
+      {
+        "id": "nuac5egr47z",
+        "text": "八股",
+        "note": "",
+        "collapsed": false,
+        "children": [
+          {
+            "id": "ni168are9fa",
+            "text": "怎么准备",
+            "note": "",
+            "collapsed": false,
+            "children": [
+              {
+                "id": "njblmxx5ym6",
+                "text": "在简历的技术栈板块写对应的八股",
+                "note": "",
+                "collapsed": false,
+                "children": [],
+                "summaries": [],
+                "boundaries": []
+              },
+              {
+                "id": "n455e24wdf3",
+                "text": "准备的自我介绍中强调技术栈",
+                "note": "",
+                "collapsed": false,
+                "children": [],
+                "summaries": [],
+                "boundaries": []
+              },
+              {
+                "id": "nw2uo3ckrc8",
+                "text": "写完后再去搜集对应内容去被、去调整",
+                "note": "",
+                "collapsed": false,
+                "children": [],
+                "summaries": [],
+                "boundaries": []
+              },
+              {
+                "id": "n27eeb2rdg8",
+                "text": "还要把项目中遇到的典型问题牵引出的八股也完全掌握",
+                "note": "",
+                "collapsed": false,
+                "children": [],
+                "summaries": [],
+                "boundaries": []
+              }
+            ],
+            "summaries": [],
+            "boundaries": []
+          },
+          {
+            "id": "n3sc0ij52x6",
+            "text": "怎么背/怎么讲",
+            "note": "",
+            "collapsed": false,
+            "children": [
+              {
+                "id": "nt3fq29pcf3",
+                "text": "1.是什么",
+                "note": "",
+                "collapsed": false,
+                "children": [],
+                "summaries": [],
+                "boundaries": []
+              },
+              {
+                "id": "nm2c9py3o92",
+                "text": "2.怎么解决（可能有多种方式）",
+                "note": "",
+                "collapsed": false,
+                "children": [],
+                "summaries": [],
+                "boundaries": []
+              },
+              {
+                "id": "nsn4d5t5whg",
+                "text": "3.解决方式的优缺点",
+                "note": "",
+                "collapsed": false,
+                "children": [],
+                "summaries": [],
+                "boundaries": []
+              },
+              {
+                "id": "n4raiimc3w8",
+                "text": "4.对应的项目决策",
+                "note": "",
+                "collapsed": false,
+                "children": [],
+                "summaries": [],
+                "boundaries": []
+              },
+              {
+                "id": "nlyrlstj9it",
+                "text": "5.主动牵引出其它相关问题，把握主动权",
+                "note": "",
+                "collapsed": false,
+                "children": [],
+                "summaries": [],
+                "boundaries": []
+              }
+            ],
+            "summaries": [],
+            "boundaries": []
+          }
+        ],
+        "summaries": [],
+        "boundaries": []
+      },
+      {
+        "id": "ntxmkejprb8",
+        "text": "算法",
+        "note": "",
+        "collapsed": false,
+        "children": [
+          {
+            "id": "n1gnj5kny72",
+            "text": "尽早准备",
+            "note": "",
+            "collapsed": false,
+            "children": [],
+            "summaries": [],
+            "boundaries": []
+          },
+          {
+            "id": "n8lfoaso5i5",
+            "text": "大部分情况下：hot 100",
+            "note": "",
+            "collapsed": false,
+            "children": [
+              {
+                "id": "nvyc34wehdx",
+                "text": "面试官不想卡的情况下：简单/中等",
+                "note": "",
+                "collapsed": false,
+                "children": [],
+                "summaries": [],
+                "boundaries": []
+              }
+            ],
+            "summaries": [],
+            "boundaries": []
+          },
+          {
+            "id": "nz6x4ufj1xe",
+            "text": "准备方式",
+            "note": "",
+            "collapsed": false,
+            "children": [
+              {
+                "id": "nw5otd468f5",
+                "text": "背诵",
+                "note": "",
+                "collapsed": false,
+                "children": [],
+                "summaries": [],
+                "boundaries": []
+              },
+              {
+                "id": "no5hgc8leij",
+                "text": "默写（敲）",
+                "note": "",
+                "collapsed": false,
+                "children": [],
+                "summaries": [],
+                "boundaries": []
+              },
+              {
+                "id": "nc9lc5lqmfc",
+                "text": "能讲思路",
+                "note": "",
+                "collapsed": false,
+                "children": [],
+                "summaries": [],
+                "boundaries": []
+              }
+            ],
+            "summaries": [],
+            "boundaries": []
+          }
+        ],
+        "summaries": [],
+        "boundaries": []
+      }
+    ]
+  },
+  "createdAt": 1794062218888,
+  "updatedAt": 1794063294975
+}

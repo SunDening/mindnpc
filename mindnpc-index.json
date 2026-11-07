@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": 1794044959467,
+  "updatedAt": 1794063339227,
   "docs": {
     "doc_g22x195f5bj": {
       "id": "doc_g22x195f5bj",
@@ -13,6 +13,12 @@
       "title": "TinyRPC 框架设计解析",
       "size": 15262,
       "updatedAt": 1794044959467
+    },
+    "doc_xp5a4kdbnns": {
+      "id": "doc_xp5a4kdbnns",
+      "title": "实习突击",
+      "size": 13606,
+      "updatedAt": 1794063339227
     }
   }
 }

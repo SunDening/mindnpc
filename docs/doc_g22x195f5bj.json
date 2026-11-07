@@ -1,0 +1,141 @@
+{
+  "id": "doc_g22x195f5bj",
+  "app": "MindNPC",
+  "version": 1,
+  "title": "把想法种成一张图",
+  "layout": "both",
+  "root": {
+    "id": "n9hvbe7d5bj",
+    "text": "把想法种成一张图",
+    "note": "<p>这张图既是说明书，也是默认示例。点开每个主题，看右侧笔记——那里才是 MindNPC 的重点。</p><p>不喜欢？用右上角菜单<strong>新建脑图</strong>，从一张空白纸开始。所有数据只保存在你的浏览器里，重要内容记得导出 .mindnpc 备份。</p>",
+    "collapsed": false,
+    "children": [
+      {
+        "id": "nfcsh3ml5bj",
+        "text": "公式，不必开会员",
+        "note": "<p>公式用 LaTeX 写。节点里写行内公式，笔记里还能写块级推导，全部在本地用 KaTeX 排版，不联网、不需要会员。</p><div class=\"formula-block\" data-tex=\"PV = \\sum_{t=1}^{n} \\frac{CF_t}{(1+r)^t}\" contenteditable=\"false\"></div><p>编辑主题时你看到的是 <code>$...$</code> 源码，提交后自动变成排版好的公式。双击公式可以修改。</p>",
+        "collapsed": false,
+        "children": [
+          {
+            "id": "nblo8h465bj",
+            "text": "行内公式：$a^2 + b^2 = c^2$",
+            "note": "",
+            "collapsed": false,
+            "children": []
+          },
+          {
+            "id": "nh7dz4b25bj",
+            "text": "双击主题就能改",
+            "note": "",
+            "collapsed": false,
+            "children": []
+          }
+        ]
+      },
+      {
+        "id": "nwqydk3z5bj",
+        "text": "图片，住进笔记里",
+        "note": "<p>截图、手写照片、PDF 里裁出来的图，都可以直接粘进笔记。</p><img src=\"data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22780%22%20height%3D%22340%22%20viewBox%3D%220%200%20780%20340%22%3E%0A%20%20%20%20%20%20%3Crect%20width%3D%22780%22%20height%3D%22340%22%20rx%3D%2216%22%20fill%3D%22%23F3F0E5%22%2F%3E%0A%20%20%20%20%20%20%3Cg%20font-family%3D%22Segoe%20UI%2C%20Microsoft%20YaHei%2C%20sans-serif%22%3E%0A%20%20%20%20%20%20%20%20%3Ctext%20x%3D%2234%22%20y%3D%2242%22%20font-size%3D%2214%22%20fill%3D%22%237C827A%22%3E%E4%B8%BB%E9%A2%98%E8%B4%9F%E8%B4%A3%E5%8E%8B%E7%BC%A9%EF%BC%8C%E7%AC%94%E8%AE%B0%E8%B4%9F%E8%B4%A3%E5%B1%95%E5%BC%80%3C%2Ftext%3E%0A%20%20%20%20%20%20%20%20%3Crect%20x%3D%2238%22%20y%3D%22128%22%20width%3D%22196%22%20height%3D%2272%22%20rx%3D%2213%22%20fill%3D%22%231D2320%22%2F%3E%0A%20%20%20%20%20%20%20%20%3Ctext%20x%3D%22136%22%20y%3D%22170%22%20font-size%3D%2217%22%20fill%3D%22%23F7F4EA%22%20text-anchor%3D%22middle%22%20font-weight%3D%22600%22%3E%E4%B8%AD%E5%BF%83%E4%B8%BB%E9%A2%98%3C%2Ftext%3E%0A%20%20%20%20%20%20%20%20%3Cpath%20d%3D%22M234%20164%20C%20300%20164%2C%20302%20164%2C%20350%20164%22%20stroke%3D%22%23B5402C%22%20stroke-width%3D%222%22%20fill%3D%22none%22%2F%3E%0A%20%20%20%20%20%20%20%20%3Crect%20x%3D%22358%22%20y%3D%2250%22%20width%3D%22382%22%20height%3D%22240%22%20rx%3D%229%22%20fill%3D%22%23FFFDF6%22%20stroke%3D%22%23D8D4C6%22%2F%3E%0A%20%20%20%20%20%20%20%20%3Cpath%20d%3D%22M358%2050%20L740%2050%20L740%2076%20L358%2076%20Z%22%20fill%3D%22%23F2DED7%22%2F%3E%0A%20%20%20%20%20%20%20%20%3Ctext%20x%3D%22380%22%20y%3D%2268%22%20font-size%3D%2211%22%20fill%3D%22%238E2F1F%22%20letter-spacing%3D%221.4%22%3EMARGIN%20NOTE%20%C2%B7%20%E7%AC%94%E8%AE%B0%3C%2Ftext%3E%0A%20%20%20%20%20%20%20%20%3Crect%20x%3D%22382%22%20y%3D%2296%22%20width%3D%22196%22%20height%3D%229%22%20rx%3D%224.5%22%20fill%3D%22%23E6E2D4%22%2F%3E%0A%20%20%20%20%20%20%20%20%3Crect%20x%3D%22382%22%20y%3D%22116%22%20width%3D%22304%22%20height%3D%229%22%20rx%3D%224.5%22%20fill%3D%22%23EDE9DC%22%2F%3E%0A%20%20%20%20%20%20%20%20%3Crect%20x%3D%22382%22%20y%3D%22136%22%20width%3D%22256%22%20height%3D%229%22%20rx%3D%224.5%22%20fill%3D%22%23EDE9DC%22%2F%3E%0A%20%20%20%20%20%20%20%20%3Crect%20x%3D%22382%22%20y%3D%22172%22%20width%3D%22150%22%20height%3D%2276%22%20rx%3D%226%22%20fill%3D%22%23E7EEF1%22%20stroke%3D%22%23CBDADD%22%2F%3E%0A%20%20%20%20%20%20%20%20%3Ccircle%20cx%3D%22408%22%20cy%3D%22194%22%20r%3D%227%22%20fill%3D%22%23A9C3C9%22%2F%3E%0A%20%20%20%20%20%20%20%20%3Cpath%20d%3D%22M390%20236%20L420%20208%20L440%20226%20L458%20210%20L476%20234%22%20stroke%3D%22%236E9198%22%20stroke-width%3D%222.4%22%20fill%3D%22none%22%2F%3E%0A%20%20%20%20%20%20%20%20%3Ctext%20x%3D%22548%22%20y%3D%22204%22%20font-size%3D%2219%22%20fill%3D%22%231D2320%22%20font-style%3D%22italic%22%3EPV%20%3D%20%CE%A3%3C%2Ftext%3E%0A%20%20%20%20%20%20%20%20%3Ctext%20x%3D%22548%22%20y%3D%22232%22%20font-size%3D%2212%22%20fill%3D%22%234B534D%22%3ECF%E2%82%9C%20%2F%20(1%2Br)%E1%B5%97%3C%2Ftext%3E%0A%20%20%20%20%20%20%20%20%3Crect%20x%3D%22382%22%20y%3D%22262%22%20width%3D%2211%22%20height%3D%2211%22%20rx%3D%222.5%22%20fill%3D%22%2335685C%22%2F%3E%0A%20%20%20%20%20%20%20%20%3Cpath%20d%3D%22M384%20267%20l3%203%20l5%20-6%22%20stroke%3D%22%23FFFDF6%22%20stroke-width%3D%221.6%22%20fill%3D%22none%22%2F%3E%0A%20%20%20%20%20%20%20%20%3Ctext%20x%3D%22402%22%20y%3D%22272%22%20font-size%3D%2211%22%20fill%3D%22%234B534D%22%3E%E6%8A%8A%E6%8E%A8%E5%AF%BC%E7%95%99%E5%9C%A8%E8%BF%99%E4%B8%80%E5%B1%82%3C%2Ftext%3E%0A%20%20%20%20%20%20%20%20%3Ctext%20x%3D%2234%22%20y%3D%22312%22%20font-size%3D%2211%22%20fill%3D%22%238C9289%22%3EMindNPC%20%C2%B7%20%E5%9B%BE%E7%89%87%E3%80%81%E5%85%AC%E5%BC%8F%E3%80%81%E8%A1%A8%E6%A0%BC%E3%80%81%E4%BB%A3%E7%A0%81%E9%83%BD%E5%8F%AF%E4%BB%A5%E4%BD%8F%E8%BF%9B%E7%AC%94%E8%AE%B0%3C%2Ftext%3E%0A%20%20%20%20%20%20%3C%2Fg%3E%0A%20%20%20%20%3C%2Fsvg%3E\" alt=\"主题与笔记的关系示意\"><p>图片随脑图文件一起保存，导出 Markdown 时可以选择打包成 zip，不必再忍受「图片只能塞进主题」。</p>",
+        "collapsed": false,
+        "children": [
+          {
+            "id": "nnmrhqx95bj",
+            "text": "直接粘贴截图",
+            "note": "",
+            "collapsed": false,
+            "children": []
+          },
+          {
+            "id": "n4l39bet5bj",
+            "text": "宽度自动适应",
+            "note": "",
+            "collapsed": false,
+            "children": []
+          }
+        ]
+      },
+      {
+        "id": "nox200ma5bj",
+        "text": "备注不是小尾巴",
+        "note": "<h3>一条主题，两层空间</h3><p>主题负责<strong>压缩</strong>，笔记负责<strong>展开</strong>。把一句话结论放在图上，把推导、出处和反例留在右边。</p><blockquote>好的脑图不是把话说短，而是把话放在该在的层级。</blockquote><ul class=\"todo\"><li data-checked=\"true\">把结论写进节点</li><li data-checked=\"false\">把推导写进笔记</li><li data-checked=\"false\">导出 Markdown 放进 Obsidian</li></ul><pre data-lang=\"javascript\"><code class=\"language-javascript\">// 笔记里也可以放代码\nconst insight = map.node(\"笔记\").note;</code></pre><table><thead><tr><th>内容</th><th>放在哪</th></tr></thead><tbody><tr><td>一句话结论</td><td>主题</td></tr><tr><td>推导与出处</td><td>笔记</td></tr><tr><td>下一步行动</td><td>待办</td></tr></tbody></table>",
+        "collapsed": false,
+        "children": [
+          {
+            "id": "ns2rbjj25bj",
+            "text": "Markdown 快捷键",
+            "note": "",
+            "collapsed": false,
+            "children": []
+          },
+          {
+            "id": "n4xzijow5bj",
+            "text": "待办清单",
+            "note": "",
+            "collapsed": false,
+            "children": []
+          },
+          {
+            "id": "nx48fpyk5bj",
+            "text": "代码块",
+            "note": "",
+            "collapsed": false,
+            "children": []
+          }
+        ]
+      },
+      {
+        "id": "n2kkqlyq5bj",
+        "text": "导出，不用看人脸色",
+        "note": "<p>图片、公式、笔记都会跟着导出走。没有水印，没有「升级会员解锁更高清」。</p><p>导出入口在右上角，也可以按 <code>Ctrl+E</code> 打开菜单。</p>",
+        "collapsed": false,
+        "children": [
+          {
+            "id": "nrh8u1oq5bj",
+            "text": "PNG / SVG",
+            "note": "",
+            "collapsed": false,
+            "children": []
+          },
+          {
+            "id": "nrvajtz05bj",
+            "text": "PDF 自动分页",
+            "note": "",
+            "collapsed": false,
+            "children": []
+          },
+          {
+            "id": "nbwivtrc5bj",
+            "text": "Markdown 进 Obsidian",
+            "note": "",
+            "collapsed": false,
+            "children": []
+          }
+        ]
+      },
+      {
+        "id": "n8680zri5bj",
+        "text": "旧 XMind 也能进来",
+        "note": "<p>把 <code>.xmind</code> 文件拖进窗口，主题树和纯文本备注会一起导入。图片附件暂时不处理，后续可以补。</p>",
+        "collapsed": false,
+        "children": [
+          {
+            "id": "njawd0wg5bj",
+            "text": "拖拽导入",
+            "note": "",
+            "collapsed": false,
+            "children": []
+          },
+          {
+            "id": "n19x1qac5bj",
+            "text": "MindNPC 文件",
+            "note": "",
+            "collapsed": false,
+            "children": []
+          }
+        ]
+      }
+    ]
+  },
+  "createdAt": 1794040546735,
+  "updatedAt": 1794042340312
+}

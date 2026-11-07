@@ -284,6 +284,25 @@
             ],
             "summaries": [],
             "boundaries": []
+          },
+          {
+            "id": "nnviz73ti07",
+            "text": "可参考项目",
+            "note": "",
+            "collapsed": false,
+            "children": [
+              {
+                "id": "n15sb0llpen",
+                "text": "https://github.com/Xiaoc7r/DOVideo-AI",
+                "note": "",
+                "collapsed": false,
+                "children": [],
+                "summaries": [],
+                "boundaries": []
+              }
+            ],
+            "summaries": [],
+            "boundaries": []
           }
         ],
         "summaries": [],
@@ -478,5 +497,5 @@
     ]
   },
   "createdAt": 1794062218888,
-  "updatedAt": 1794063294975
+  "updatedAt": 1794063391941
 }

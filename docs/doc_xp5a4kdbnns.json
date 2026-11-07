@@ -91,13 +91,9 @@
                     "text": "大多数公司接受转语言",
                     "note": "",
                     "collapsed": false,
-                    "children": [],
-                    "summaries": [],
-                    "boundaries": []
+                    "children": []
                   }
-                ],
-                "summaries": [],
-                "boundaries": []
+                ]
               },
               {
                 "id": "n7ptd3xi4cl",
@@ -110,22 +106,16 @@
                     "text": "学历：",
                     "note": "",
                     "collapsed": false,
-                    "children": [],
-                    "summaries": [],
-                    "boundaries": []
+                    "children": []
                   },
                   {
                     "id": "nxhnjyfurh8",
                     "text": "实习 >> 项目 > 技术栈",
                     "note": "<ol><li>有实习问实习；</li><li>没实习问项目；</li><li>项目烂大街或完全不匹配才问八股，拷打技术栈深度和广度；</li></ol>",
                     "collapsed": false,
-                    "children": [],
-                    "summaries": [],
-                    "boundaries": []
+                    "children": []
                   }
-                ],
-                "summaries": [],
-                "boundaries": []
+                ]
               },
               {
                 "id": "ndz2e49yfh9",
@@ -138,31 +128,23 @@
                     "text": "个人性格",
                     "note": "",
                     "collapsed": false,
-                    "children": [],
-                    "summaries": [],
-                    "boundaries": []
+                    "children": []
                   },
                   {
                     "id": "nk9ickl3mo2",
                     "text": "学习课程",
                     "note": "",
                     "collapsed": false,
-                    "children": [],
-                    "summaries": [],
-                    "boundaries": []
+                    "children": []
                   },
                   {
                     "id": "ngq9ugavqgx",
                     "text": "学校实验大作业",
                     "note": "",
                     "collapsed": false,
-                    "children": [],
-                    "summaries": [],
-                    "boundaries": []
+                    "children": []
                   }
-                ],
-                "summaries": [],
-                "boundaries": []
+                ]
               }
             ]
           }
@@ -185,13 +167,9 @@
                 "text": "关于项目的思考 > 项目本身是什么",
                 "note": "",
                 "collapsed": false,
-                "children": [],
-                "summaries": [],
-                "boundaries": []
+                "children": []
               }
-            ],
-            "summaries": [],
-            "boundaries": []
+            ]
           },
           {
             "id": "n7gh0huc6dr",
@@ -204,22 +182,16 @@
                 "text": "买一个成熟不烂大街的项目和文档，再二次包装",
                 "note": "",
                 "collapsed": false,
-                "children": [],
-                "summaries": [],
-                "boundaries": []
+                "children": []
               },
               {
                 "id": "n097wiu8x0b",
                 "text": "推荐后端为主又大量涉及 AI/Agent 的项目",
                 "note": "",
                 "collapsed": false,
-                "children": [],
-                "summaries": [],
-                "boundaries": []
+                "children": []
               }
-            ],
-            "summaries": [],
-            "boundaries": []
+            ]
           },
           {
             "id": "niq7i0ddiwc",
@@ -232,58 +204,44 @@
                 "text": "这个技术栈是什么，大致怎么用，为什么用",
                 "note": "",
                 "collapsed": false,
-                "children": [],
-                "summaries": [],
-                "boundaries": []
+                "children": []
               },
               {
                 "id": "n6ndngukao5",
                 "text": "什么背景，基于项目背景为什么偏偏用这个选型",
                 "note": "",
                 "collapsed": false,
-                "children": [],
-                "summaries": [],
-                "boundaries": []
+                "children": []
               },
               {
                 "id": "nutv4f36uo1",
                 "text": "具体的解决流程",
                 "note": "",
                 "collapsed": false,
-                "children": [],
-                "summaries": [],
-                "boundaries": []
+                "children": []
               },
               {
                 "id": "nhnlm1b4yvm",
                 "text": "各种特殊情况下的可能的兜底策略",
                 "note": "",
                 "collapsed": false,
-                "children": [],
-                "summaries": [],
-                "boundaries": []
+                "children": []
               },
               {
                 "id": "n4iv2qnqeuz",
                 "text": "真正的需求，实际产出成果",
                 "note": "",
                 "collapsed": false,
-                "children": [],
-                "summaries": [],
-                "boundaries": []
+                "children": []
               },
               {
                 "id": "n2uch5n4orw",
                 "text": "同类问题解决方案的一套方法论",
                 "note": "",
                 "collapsed": false,
-                "children": [],
-                "summaries": [],
-                "boundaries": []
+                "children": []
               }
-            ],
-            "summaries": [],
-            "boundaries": []
+            ]
           },
           {
             "id": "nnviz73ti07",
@@ -296,17 +254,11 @@
                 "text": "https://github.com/Xiaoc7r/DOVideo-AI",
                 "note": "",
                 "collapsed": false,
-                "children": [],
-                "summaries": [],
-                "boundaries": []
+                "children": []
               }
-            ],
-            "summaries": [],
-            "boundaries": []
+            ]
           }
-        ],
-        "summaries": [],
-        "boundaries": []
+        ]
       },
       {
         "id": "nuac5egr47z",
@@ -325,40 +277,30 @@
                 "text": "在简历的技术栈板块写对应的八股",
                 "note": "",
                 "collapsed": false,
-                "children": [],
-                "summaries": [],
-                "boundaries": []
+                "children": []
               },
               {
                 "id": "n455e24wdf3",
                 "text": "准备的自我介绍中强调技术栈",
                 "note": "",
                 "collapsed": false,
-                "children": [],
-                "summaries": [],
-                "boundaries": []
+                "children": []
               },
               {
                 "id": "nw2uo3ckrc8",
                 "text": "写完后再去搜集对应内容去被、去调整",
                 "note": "",
                 "collapsed": false,
-                "children": [],
-                "summaries": [],
-                "boundaries": []
+                "children": []
               },
               {
                 "id": "n27eeb2rdg8",
                 "text": "还要把项目中遇到的典型问题牵引出的八股也完全掌握",
                 "note": "",
                 "collapsed": false,
-                "children": [],
-                "summaries": [],
-                "boundaries": []
+                "children": []
               }
-            ],
-            "summaries": [],
-            "boundaries": []
+            ]
           },
           {
             "id": "n3sc0ij52x6",
@@ -371,53 +313,39 @@
                 "text": "1.是什么",
                 "note": "",
                 "collapsed": false,
-                "children": [],
-                "summaries": [],
-                "boundaries": []
+                "children": []
               },
               {
                 "id": "nm2c9py3o92",
                 "text": "2.怎么解决（可能有多种方式）",
                 "note": "",
                 "collapsed": false,
-                "children": [],
-                "summaries": [],
-                "boundaries": []
+                "children": []
               },
               {
                 "id": "nsn4d5t5whg",
                 "text": "3.解决方式的优缺点",
                 "note": "",
                 "collapsed": false,
-                "children": [],
-                "summaries": [],
-                "boundaries": []
+                "children": []
               },
               {
                 "id": "n4raiimc3w8",
                 "text": "4.对应的项目决策",
                 "note": "",
                 "collapsed": false,
-                "children": [],
-                "summaries": [],
-                "boundaries": []
+                "children": []
               },
               {
                 "id": "nlyrlstj9it",
                 "text": "5.主动牵引出其它相关问题，把握主动权",
                 "note": "",
                 "collapsed": false,
-                "children": [],
-                "summaries": [],
-                "boundaries": []
+                "children": []
               }
-            ],
-            "summaries": [],
-            "boundaries": []
+            ]
           }
-        ],
-        "summaries": [],
-        "boundaries": []
+        ]
       },
       {
         "id": "ntxmkejprb8",
@@ -430,9 +358,7 @@
             "text": "尽早准备",
             "note": "",
             "collapsed": false,
-            "children": [],
-            "summaries": [],
-            "boundaries": []
+            "children": []
           },
           {
             "id": "n8lfoaso5i5",
@@ -445,13 +371,9 @@
                 "text": "面试官不想卡的情况下：简单/中等",
                 "note": "",
                 "collapsed": false,
-                "children": [],
-                "summaries": [],
-                "boundaries": []
+                "children": []
               }
-            ],
-            "summaries": [],
-            "boundaries": []
+            ]
           },
           {
             "id": "nz6x4ufj1xe",
@@ -464,38 +386,28 @@
                 "text": "背诵",
                 "note": "",
                 "collapsed": false,
-                "children": [],
-                "summaries": [],
-                "boundaries": []
+                "children": []
               },
               {
                 "id": "no5hgc8leij",
                 "text": "默写（敲）",
                 "note": "",
                 "collapsed": false,
-                "children": [],
-                "summaries": [],
-                "boundaries": []
+                "children": []
               },
               {
                 "id": "nc9lc5lqmfc",
                 "text": "能讲思路",
                 "note": "",
                 "collapsed": false,
-                "children": [],
-                "summaries": [],
-                "boundaries": []
+                "children": []
               }
-            ],
-            "summaries": [],
-            "boundaries": []
+            ]
           }
-        ],
-        "summaries": [],
-        "boundaries": []
+        ]
       }
     ]
   },
   "createdAt": 1794062218888,
-  "updatedAt": 1794063391941
+  "updatedAt": 1794065010135
 }

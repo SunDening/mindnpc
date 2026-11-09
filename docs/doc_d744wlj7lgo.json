@@ -1,0 +1,3219 @@
+{
+  "id": "doc_d744wlj7lgo",
+  "app": "MindNPC",
+  "version": 1,
+  "title": "中间件",
+  "layout": "both",
+  "root": {
+    "id": "a81aaf27-912e-45dd-ae58-e1afe91a4a62",
+    "text": "中间件",
+    "note": "",
+    "collapsed": false,
+    "children": [
+      {
+        "id": "4b645861-be64-472d-8731-0f16695ed994",
+        "text": "Kafka",
+        "note": "",
+        "collapsed": false,
+        "children": [
+          {
+            "id": "389c0805-4931-4088-bb8a-5563be2b92e5",
+            "text": "Topic",
+            "note": "",
+            "collapsed": false,
+            "children": []
+          },
+          {
+            "id": "810d6e69-0bf1-4432-8a2b-98a75b48d228",
+            "text": "分区",
+            "note": "",
+            "collapsed": false,
+            "children": []
+          },
+          {
+            "id": "94d93d66-9b26-48d1-bca8-ea3973b965c6",
+            "text": "broker",
+            "note": "",
+            "collapsed": false,
+            "children": []
+          },
+          {
+            "id": "93e7376b-36ba-40f5-ab5f-cbeb8e0049a8",
+            "text": "消费者组",
+            "note": "",
+            "collapsed": false,
+            "children": []
+          },
+          {
+            "id": "2c28cdc2-4b67-4a2c-81c3-fa0759b880a3",
+            "text": "ZooKeeper",
+            "note": "",
+            "collapsed": false,
+            "children": []
+          },
+          {
+            "id": "659c7714-6746-42c3-b5ae-eaf48a7f5ba7",
+            "text": "磁盘持久化",
+            "note": "",
+            "collapsed": false,
+            "children": []
+          }
+        ]
+      },
+      {
+        "id": "59aba10d-0b18-4f00-a99a-b7d65ebe838a",
+        "text": "Redis",
+        "note": "",
+        "collapsed": true,
+        "children": [
+          {
+            "id": "4d8408d5-311f-49cd-8451-acc8ea12c10a",
+            "text": "数据类型",
+            "note": "<p>先看「它解决什么问题」，命令自然就记住了。每条命令都能直接在 redis-cli 里敲。</p>",
+            "collapsed": true,
+            "children": [
+              {
+                "id": "82443343-a38c-4eee-aa8e-f34ae4a20fe9",
+                "text": "String",
+                "note": "",
+                "collapsed": false,
+                "children": [
+                  {
+                    "id": "dcde02a8-c91e-4e67-8042-843c511eb758",
+                    "text": "命令：SET / GET / INCR / SETEX",
+                    "note": "",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "8a968312-caea-46e3-a59e-372bb226640c",
+                    "text": "场景 1：手机验证码",
+                    "note": "<p>6 位数字，5 分钟内有效。过期时间交给 Redis，不用自己写定时任务扫表。</p><p>SET code:13800138000 8674 EX 300<br>GET code:13800138000   → \"8674\" 或 nil（已过期）</p><p>延伸：SET NX EX 还能做「一分钟内只能发一次」的发送频率限制。</p>",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "587aa69d-898e-471e-bb38-8cd68e1a07fa",
+                    "text": "场景 2：阅读量 / 点赞数",
+                    "note": "<p>直接用 MySQL 做 UPDATE ... SET views = views + 1，热门文章会被这一行锁住。</p><p>INCR article:view:1001<br>INCRBY article:view:1001 10</p><p>关键点：INCR 是原子操作，一万个请求同时加，结果一定不多不少。</p>",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "0283d70c-4ce9-4d4d-880c-60cedc68c7e1",
+                    "text": "场景 3：全局唯一单号",
+                    "note": "<p>订单号要全局唯一。用它当发号器，比数据库自增 ID 快得多，还天然解决跨库冲突。</p><p>INCR order:seq   → 10001<br>20260930 + 10001 → 2026093000010001</p><p>注意：Redis 重启可能丢号，生产上一般用「时间戳 + Redis 步长」或雪花算法配合。</p>",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "1e86a3e6-fc41-4361-a27e-719043497221",
+                    "text": "为什么：读写最简 · 带过期 · 自增不重复",
+                    "note": "",
+                    "collapsed": false,
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "e6c5d264-03ef-4d11-99ce-142dec4782b2",
+                "text": "Hash",
+                "note": "",
+                "collapsed": false,
+                "children": [
+                  {
+                    "id": "d95ca5f4-881a-49f9-978f-445e658d2a08",
+                    "text": "命令：HSET / HGET / HGETALL",
+                    "note": "",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "3fab515b-10ef-4587-941d-b8f232ed1da1",
+                    "text": "场景：商品详情 · 用户信息 · 购物车",
+                    "note": "",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "011cb13b-d602-4100-9689-43e6bb9faea3",
+                    "text": "为什么：改一个字段，不必整对象读改写",
+                    "note": "",
+                    "collapsed": false,
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "c84abe34-309d-4531-aa45-828420e1a7b6",
+                "text": "List",
+                "note": "",
+                "collapsed": false,
+                "children": [
+                  {
+                    "id": "db891e8e-48e8-4c38-a40e-e3729b59e600",
+                    "text": "命令：LPUSH / RPOP / LRANGE",
+                    "note": "",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "a400bcd1-bb23-4fab-abbf-6fb831deca41",
+                    "text": "场景：最新消息列表 · 简单任务队列",
+                    "note": "",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "04b3ad28-6212-4cc6-b965-a38dba1bf7b5",
+                    "text": "为什么：有序 · 两端进出都是 O(1)",
+                    "note": "",
+                    "collapsed": false,
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "7146b2b7-7bcf-405f-843c-dad84ad7d7c2",
+                "text": "Set",
+                "note": "",
+                "collapsed": false,
+                "children": [
+                  {
+                    "id": "1f7b4c79-77ab-49f7-a914-82623095afb0",
+                    "text": "命令：SADD / SISMEMBER / SINTER",
+                    "note": "",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "4506d38d-8cec-41ec-886c-487076ad4cbc",
+                    "text": "场景：点赞去重 · 抽奖池 · 共同好友",
+                    "note": "",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "674556b5-bfcc-48ef-a0e8-9f15da824b3a",
+                    "text": "为什么：自动去重 · 集合运算服务端一次算完",
+                    "note": "",
+                    "collapsed": false,
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "23470126-1fa8-4b0e-9b40-905dc20073bf",
+                "text": "ZSet",
+                "note": "",
+                "collapsed": false,
+                "children": [
+                  {
+                    "id": "53882223-d902-438c-b58e-37156c113389",
+                    "text": "命令：ZADD / ZRANGE / ZREVRANK",
+                    "note": "",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "5cdd9157-0740-4d1a-a5d2-b32b714bef04",
+                    "text": "场景：积分排行榜 · 热搜榜 · 订单超时取消",
+                    "note": "",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "4bbd0e85-8fd1-468a-af52-4bfc86043834",
+                    "text": "为什么：底层跳表 · 按分数取前 N 名极快",
+                    "note": "",
+                    "collapsed": false,
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "933f1e69-02b1-4ece-9a2a-89268a594ee0",
+                "text": "特殊类型",
+                "note": "<p>不是必须掌握，但面试常问。共同思路：用极小的空间解决一个特定的统计问题。</p>",
+                "collapsed": false,
+                "children": [
+                  {
+                    "id": "30d8acfb-f9a0-4f98-b1b1-ab8b6cf702c3",
+                    "text": "Bitmap 位图",
+                    "note": "<p>一个 bit 存一个人的状态，100 万用户只占 125 KB。</p><p>SETBIT sign:u8:0930 1 1<br>BITCOUNT sign:u8:0930</p><p>场景：连续签到统计、日活跃用户标记。</p>",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "3fd0baa5-e98a-44a5-9d8e-9f19d8526e52",
+                    "text": "HyperLogLog",
+                    "note": "<p>不存元素，只估算「有多少个不同的」。固定 12 KB 就能估 1 亿 UV，误差约 0.81%。</p><p>PFADD uv:20260930 user1 user2<br>PFCOUNT uv:20260930</p><p>场景：网站 UV、页面独立访客统计。</p>",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "2ae4951d-f9ce-4261-b431-6d17010ae900",
+                    "text": "GEO 地理位置",
+                    "note": "<p>底层还是 ZSet，分数是经纬度编码，省掉自建空间索引的一整套工作。</p><p>GEOADD shop 116.40 39.90 \"店A\"<br>GEOSEARCH shop FROMLONLAT 116.41 39.91 BYRADIUS 3 KM ASC</p><p>场景：附近的人 / 附近的门店、外卖骑手距离。</p>",
+                    "collapsed": false,
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "765deb1d-a60b-4853-a47e-5a9866d958b9",
+            "text": "底层编码",
+            "note": "<p>同一类数据，规模小的时候用紧凑编码省内存，变大之后才升级成指针结构。这就是「一个类型多种编码」。</p>",
+            "collapsed": true,
+            "children": [
+              {
+                "id": "17f06f39-d7f6-4f2c-b457-0b5f6367e7a8",
+                "text": "redisObject：type + encoding + ptr",
+                "note": "<p>每个 value 外面都包一层 redisObject：type 是「对外的类型」，encoding 是「内部的编码」，ptr 指向真正的数据结构。<br>对外有 5 种 type，内部有 11 种 encoding。</p>",
+                "collapsed": false,
+                "children": []
+              },
+              {
+                "id": "68e2ecb0-0673-4816-a9b9-1ba0a4f3fa10",
+                "text": "SDS：String 的底层",
+                "note": "",
+                "collapsed": false,
+                "children": [
+                  {
+                    "id": "df4bf281-6f5d-4147-a7e1-d4373378b0c8",
+                    "text": "结构：len + alloc + buf",
+                    "note": "",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "61830786-10ae-4122-af54-b04d99f663bd",
+                    "text": "O(1) 取长度，不用像 C 那样遍历到 \\0",
+                    "note": "",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "3908eab3-3d55-44c5-8bbb-3d06b3bf7039",
+                    "text": "二进制安全：靠 len 判结尾，能存 \\0",
+                    "note": "",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "918421f0-822a-461a-9eb6-d5a238d45b6d",
+                    "text": "空间预分配 + 惰性释放",
+                    "note": "<p>扩容时 len &lt; 1MB 就多分一倍，≥1MB 就多分 1MB；缩短时不立刻还内存，只改 len。</p>",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "4cc3084c-af46-41ff-9984-05a172450673",
+                    "text": "仍然兼容 C 字符串函数（末尾补 \\0）",
+                    "note": "",
+                    "collapsed": false,
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "9f611f5c-0896-477d-bd7c-296aa07b9afd",
+                "text": "dict 哈希表：Hash / Set / 全局键空间",
+                "note": "",
+                "collapsed": false,
+                "children": [
+                  {
+                    "id": "b3a1d8a4-b13b-4d6a-a627-4b72af4860ea",
+                    "text": "数组 + 链表，链地址法解决冲突",
+                    "note": "",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "24791aaa-565c-4c11-97b1-96063dc1a8b8",
+                    "text": "两张表 ht[0] / ht[1]，平时只用 ht[0]",
+                    "note": "",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "4b56a5d7-7176-4998-abbc-0a8135de8efa",
+                    "text": "扩容：负载因子 ≥ 1；缩容：< 0.1",
+                    "note": "<p>负载因子 = used / size。做 BGSAVE 时会放宽到 5，避免 fork 期间扩容。</p>",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "4b380352-aa82-4e25-879b-cbc23f877033",
+                    "text": "渐进式 rehash：每次操作搬一个桶",
+                    "note": "<p>扩容不是一次搬完，而是每次增删改查顺手搬一个桶，把开销摊到每次请求上。<br>期间查询要查两张表，新增只写 ht[1]。</p>",
+                    "collapsed": false,
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "9e438ff7-5e5f-4d10-835d-8fdccd1b3b55",
+                "text": "跳表 skiplist：ZSet 的底层",
+                "note": "",
+                "collapsed": false,
+                "children": [
+                  {
+                    "id": "3c81861c-f465-4ffe-b0fe-b5118f5e36a4",
+                    "text": "多层链表 + 概率升层（1/4 概率往上一层）",
+                    "note": "",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "88210850-8718-4956-9056-344466b8436d",
+                    "text": "平均 O(logN)，范围查询天然友好",
+                    "note": "",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "9defa9ff-e7c9-4d15-b02e-0ff7f9ffb689",
+                    "text": "ZSet 同时有 dict 和 skiplist",
+                    "note": "<p>dict 存 member → score（O(1) 查分数），skiplist 存按 score 排序的序列（范围查询、排名）。</p>",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "72dbbb5c-d611-4898-b49e-09cfb5e2f2bb",
+                    "text": "为什么不用红黑树",
+                    "note": "<p>范围查找更容易写、实现更简单；插入删除时不用旋转，只调整指针。</p>",
+                    "collapsed": false,
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "be41fb50-0ddc-4446-b050-8cea5a6cbdac",
+                "text": "紧凑编码：省掉每个元素的指针开销",
+                "note": "",
+                "collapsed": false,
+                "children": [
+                  {
+                    "id": "ef60d712-b878-48d4-96d4-6711f9dbdf05",
+                    "text": "ziplist：一整块连续内存，元素挨着放",
+                    "note": "<p>省指针、省内存，但每个元素要记「前一个元素的长度」，改一个可能引发连锁更新。</p>",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "764ce95a-b634-407b-83a7-804f6aba5cad",
+                    "text": "listpack：替代 ziplist，解决连锁更新",
+                    "note": "<p>每个元素只记自己的长度，从后往前也能遍历，不会连锁更新。7.0 起 Hash / Set / ZSet 的小对象都用它。</p>",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "02bad6ca-84d8-4e60-be7e-88a590b90400",
+                    "text": "quicklist：listpack 组成的双向链表（List）",
+                    "note": "<p>既省内存，首尾 push/pop 又是 O(1)。</p>",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "e3399f66-b749-455a-af6f-3a9017b3b9e7",
+                    "text": "intset：有序整数数组（Set）",
+                    "note": "<p>全是整数时用，支持 16 / 32 / 64 位自动升级。</p>",
+                    "collapsed": false,
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "1859747d-16e5-4f8a-b394-cad129c671e4",
+                "text": "类型 → 编码的转换阈值",
+                "note": "<p>超过阈值就从紧凑编码升级成指针结构，升级不可逆。</p>",
+                "collapsed": false,
+                "children": [
+                  {
+                    "id": "f122b5fb-5706-4192-ba79-6113a45784c4",
+                    "text": "String：int / embstr（≤44 字节）/ raw",
+                    "note": "",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "9e22318d-dc23-4daa-8292-c82170ed853f",
+                    "text": "List：quicklist",
+                    "note": "",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "5bea23b5-b598-4efd-90ed-b7d71c9b0e50",
+                    "text": "Hash：listpack → hashtable",
+                    "note": "<p>元素超过 128 个，或任一 field/value 超过 64 字节，就转 hashtable。<br>hash-max-listpack-entries 128 / hash-max-listpack-value 64</p>",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "c64252e7-188b-4499-9723-64340dba92ca",
+                    "text": "Set：intset → listpack → hashtable",
+                    "note": "<p>全整数且 ≤512 个用 intset；否则 ≤128 个且每个 ≤64 字节用 listpack；再大转 hashtable。</p>",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "23649d83-db4f-468f-8618-6e3592f0ce9b",
+                    "text": "ZSet：listpack → skiplist + dict",
+                    "note": "<p>≤128 个且每个 ≤64 字节用 listpack，超过就上跳表。<br>zset-max-listpack-entries 128 / zset-max-listpack-value 64</p>",
+                    "collapsed": false,
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "d7fd9d03-5ef4-49fa-82f9-1cd52fe9d90b",
+            "text": "持久化",
+            "note": "<p>数据全在内存里，Redis 自己挂了怎么办。落盘不是为了给数据库做备份，而是为了重启后能快速恢复。</p>",
+            "collapsed": true,
+            "children": [
+              {
+                "id": "777c6ada-9d8a-42d7-bc6c-4074dcd630cf",
+                "text": "RDB 快照",
+                "note": "",
+                "collapsed": false,
+                "children": [
+                  {
+                    "id": "356125aa-b8b5-4414-9ef6-6f0ef88409d8",
+                    "text": "做了什么：隔一段时间把全量数据写成 dump.rdb",
+                    "note": "",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "2ae0b458-487b-47d5-a318-33076085f953",
+                    "text": "好在：文件紧凑、恢复最快，fork 子进程写不挡主进程",
+                    "note": "<p>主进程照常服务，由 fork 出来的子进程把内存数据落盘。</p>",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "137e797a-cbba-457d-9084-4bc81a86e5ba",
+                    "text": "代价：两次快照之间宕机，这段数据全丢",
+                    "note": "<p>另外数据量大时，fork 会有瞬时卡顿。</p>",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "5d7c5393-1108-4a80-881e-537197d35758",
+                    "text": "什么时候触发",
+                    "note": "<p>① save 配置（如 save 900 1：900 秒内至少 1 次写）<br>② 手动 BGSAVE<br>③ 主从全量同步时，主节点会触发一次<br>④ shutdown 时</p>",
+                    "collapsed": false,
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "bf838c35-e9db-4ad3-837d-fafbc2909265",
+                "text": "AOF 日志",
+                "note": "",
+                "collapsed": false,
+                "children": [
+                  {
+                    "id": "c8e882eb-7562-4076-8ff5-9b9642a383ea",
+                    "text": "做了什么：每条写命令按顺序追加，重启时重放一遍",
+                    "note": "",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "c5b08be3-2eec-406a-b2dc-1469dc060802",
+                    "text": "好在：丢得最少，everysec 最多丢 1 秒",
+                    "note": "<p>文件是文本，能看懂、能审计。</p>",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "ac5ce465-8ced-4e14-a301-a22f8e11f267",
+                    "text": "代价：文件比 RDB 大得多，重放慢",
+                    "note": "<p>需要定期重写（rewrite）压缩体积。</p>",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "f0204997-ae35-4a58-ba4e-c3c9aec0e90f",
+                    "text": "fsync 三档：always / everysec / no",
+                    "note": "<p>always：每条命令都刷盘，最安全，性能最差。<br> everysec：每秒刷一次，最多丢 1 秒（默认，也是推荐值）。<br> no：交给操作系统，通常 30 秒左右才落盘，可能丢很多。</p>",
+                    "collapsed": false,
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "6d4d0bba-0dc4-49d0-b2d0-358d73c0ed5a",
+                "text": "混合持久化：4.0 起，生产推荐",
+                "note": "",
+                "collapsed": false,
+                "children": [
+                  {
+                    "id": "187f046a-1dfa-4910-bda4-59a269f6b433",
+                    "text": "做了什么：AOF 重写时先存一份 RDB 快照，再追加增量命令",
+                    "note": "",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "c63c6fa8-e024-46ed-9783-4127c7ac42b7",
+                    "text": "好在：兼顾 RDB 的恢复快 + AOF 的丢得少",
+                    "note": "",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "6793d08e-3368-401e-9a99-734d8a641e10",
+                    "text": "代价：要同时理解两种格式，排查稍复杂",
+                    "note": "",
+                    "collapsed": false,
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "e380da23-1034-47ad-b2b4-5432a195ee92",
+                "text": "怎么选",
+                "note": "<p>纯缓存、丢了能重算 → 可以不开持久化。<br>既要快又要尽量不丢 → 混合持久化（RDB 快照 + AOF everysec），目前生产推荐。<br>只想要恢复速度 → 只开 RDB。</p>",
+                "collapsed": false,
+                "children": []
+              }
+            ]
+          },
+          {
+            "id": "79185635-607f-4d00-bfc3-a23c0cd13961",
+            "text": "缓存问题",
+            "note": "<p>面试必问、生产必踩。三个问题的共同点：数据不在缓存里，压力就全砸到数据库上了。</p>",
+            "collapsed": false,
+            "children": [
+              {
+                "id": "61a42176-1fde-4f39-8967-3a6266dd4ba7",
+                "text": "缓存穿透",
+                "note": "",
+                "collapsed": true,
+                "children": [
+                  {
+                    "id": "b2ca8fd2-f8fa-4f13-92fd-d503341e195a",
+                    "text": "是什么：查一个根本不存在的数据",
+                    "note": "<p>缓存里没有（本来就不该有），数据库里也没有。于是每次请求都穿过缓存直达数据库。<br>典型来源：伪造 id（id = -1）、爬虫扫不存在的商品页。</p>",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "6ac9fdb2-e7f4-4304-8c1f-7d1a4ac192b1",
+                    "text": "怎么破",
+                    "note": "",
+                    "collapsed": true,
+                    "children": [
+                      {
+                        "id": "2b1d4b4b-6c40-4a02-bd52-57da4f734b8b",
+                        "text": "缓存空值：查不到也往缓存塞个 null",
+                        "note": "<p>key 存 null，过期时间设短一点（比如 60 秒）。<br>代价：会被大量随机 id 撑爆缓存，所以要配短过期。</p>",
+                        "collapsed": false,
+                        "children": []
+                      },
+                      {
+                        "id": "762e9762-8b5a-4fc7-bebd-3b0133e14804",
+                        "text": "布隆过滤器：先挡一层不存在的 key",
+                        "note": "<p>把所有存在的 id 放进布隆过滤器，请求先过它。它说「不存在」就一定不存在，可以直接返回。</p>",
+                        "collapsed": false,
+                        "children": []
+                      },
+                      {
+                        "id": "cb71703c-c555-48af-af89-3b0bae002045",
+                        "text": "参数校验：把 id = -1 这类挡在入口",
+                        "note": "",
+                        "collapsed": false,
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "1075f089-0555-4d64-8004-8c5d468ed84a",
+                "text": "缓存击穿",
+                "note": "",
+                "collapsed": true,
+                "children": [
+                  {
+                    "id": "5d0fc7f2-59f1-4da2-8aac-99ecf63dc8d5",
+                    "text": "是什么：一个热点 key 过期的瞬间",
+                    "note": "<div>注意是「一个」key，而且是有大量并发访问且缓存重建业务较复杂的热点 key。<br>它一失效，这一瞬间所有请求同时回源，把数据库打出一个尖峰。<br>这种 key 一般会被提前放进 Redis预热</div>",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "25333074-b0b0-4e1c-80e7-29baa0dd8842",
+                    "text": "怎么破",
+                    "note": "",
+                    "collapsed": true,
+                    "children": [
+                      {
+                        "id": "b9607d9e-0a51-4fe1-a11c-965e9ecf7378",
+                        "text": "互斥锁：只放一个线程回源，其余等待",
+                        "note": "<p>用 SETNX 抢一个「重建锁」，抢到的去查库，其余的睡一会儿再读缓存。</p>",
+                        "collapsed": false,
+                        "children": []
+                      },
+                      {
+                        "id": "1bed32e5-91f2-41b0-8610-72e8210ba649",
+                        "text": "逻辑过期：物理永不过期，后台异步刷新",
+                        "note": "<div>value 里自己存一个过期时间（注意在value里，而不是TTL。这个过期时间是：存数据时的时间戳加一个TTL时间），读到过期（指现在的时间戳已经超过了value里存的那个过期时间）就先返回旧值，另起线程刷新。<br>代价：会有一段时间读到旧数据。</div>",
+                        "collapsed": false,
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "87a56db8-c633-4c43-a905-21d805bc7211",
+                "text": "缓存雪崩",
+                "note": "",
+                "collapsed": true,
+                "children": [
+                  {
+                    "id": "66c76e1f-a834-4cc4-87dc-06d6979bdf5d",
+                    "text": "是什么：大批 key 同时失效，或 Redis 整体挂掉",
+                    "note": "<p>跟击穿的区别在「量」：击穿是一个热点 key，雪崩是一大批 key 在同一时刻失效，或者整个 Redis 不可用。<br>后者等于缓存层彻底没了，所有流量直接压到数据库。</p>",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "0b12b4ab-3937-4f53-8973-e8379786b7a1",
+                    "text": "怎么破",
+                    "note": "",
+                    "collapsed": true,
+                    "children": [
+                      {
+                        "id": "9883694b-5f3f-4bbd-bda9-865991412207",
+                        "text": "过期时间加随机值，把失效时间打散",
+                        "note": "",
+                        "collapsed": false,
+                        "children": []
+                      },
+                      {
+                        "id": "f13a9218-bfbe-4cca-9d4b-7ef016f6d15b",
+                        "text": "多级缓存：本地 Caffeine + Redis",
+                        "note": "",
+                        "collapsed": false,
+                        "children": []
+                      },
+                      {
+                        "id": "ffeb1375-61fc-4a86-be93-6b82bd38da14",
+                        "text": "Redis 高可用：主从 + 哨兵 / Cluster",
+                        "note": "",
+                        "collapsed": false,
+                        "children": []
+                      },
+                      {
+                        "id": "d27b664a-b215-4e3d-bd02-787a49609f8d",
+                        "text": "限流降级：真扛不住时保住核心链路",
+                        "note": "",
+                        "collapsed": false,
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "572078bf-a5e3-49b5-b69b-17e78655016b",
+                "text": "三者的区别（最容易混）",
+                "note": "<p>穿透：数据「不存在」——缓存和库里都没有。<br>击穿：一个「热点 key」过期，瞬间并发回源。<br>雪崩：大批 key 同时失效，或 Redis 整个挂掉。</p><p>一句话记：穿透是数据没有，击穿是一个 key 没了，雪崩是一层缓存没了。</p>",
+                "collapsed": false,
+                "children": []
+              },
+              {
+                "id": "d9e134ad-752f-420d-b850-0ce73f961787",
+                "text": "缓存更新策略",
+                "note": "",
+                "collapsed": true,
+                "children": [
+                  {
+                    "id": "7ab2afc6-14ab-4ca9-aafd-102c5a092e23",
+                    "text": "内存淘汰",
+                    "note": "<div>maxmemory 限定最多能用多少内存，超出后按策略挑一部分 key 删掉。下次查询时更新缓存。</div>",
+                    "collapsed": true,
+                    "children": [
+                      {
+                        "id": "fdd72992-946b-450c-8798-c8c4e2a5d364",
+                        "text": "noeviction：不删，写命令报错（默认）",
+                        "note": "",
+                        "collapsed": false,
+                        "children": []
+                      },
+                      {
+                        "id": "dedb47e7-12b0-4516-867f-1a6f91193f75",
+                        "text": "allkeys-lru：所有 key 里，淘汰最久没用过的",
+                        "note": "",
+                        "collapsed": false,
+                        "children": []
+                      },
+                      {
+                        "id": "ce3094ab-6a8c-428f-8029-ccd4fa831e33",
+                        "text": "allkeys-lfu：淘汰访问次数最少的（4.0 新增）",
+                        "note": "",
+                        "collapsed": false,
+                        "children": []
+                      },
+                      {
+                        "id": "f6dc6a18-5f9e-4497-b3eb-3814ff8ac5d2",
+                        "text": "volatile-lru：只在「设了过期时间的」里面淘汰",
+                        "note": "",
+                        "collapsed": false,
+                        "children": []
+                      },
+                      {
+                        "id": "7eedf1fb-edcc-4e92-8a29-0075f2848896",
+                        "text": "volatile-ttl：优先淘汰马上要过期的",
+                        "note": "",
+                        "collapsed": false,
+                        "children": []
+                      },
+                      {
+                        "id": "541ea8d4-977c-4695-9345-32e379364851",
+                        "text": "怎么选：纯缓存用 allkeys-lru",
+                        "note": "<p>做缓存 allkeys-lru 最省心；如果 Redis 里同时存着不能丢的数据（比如当队列用），就选 volatile-lru，别让它把队列里的消息淘汰掉。</p><p>完整是 8 种，还有 allkeys-random / volatile-random / volatile-lfu，视频没展开。</p>",
+                        "collapsed": false,
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "id": "07920541-2db2-46f0-a147-11faba0b3cf4",
+                    "text": "超时剔除",
+                    "note": "<div>给缓存数据添加 TTL 时间，到期后自动删除缓存。下次查询时更新缓存。</div>",
+                    "collapsed": false,
+                    "children": [
+                      {
+                        "id": "038655fd-d37f-4c14-94c9-94c88da3d1ad",
+                        "text": "过期时间怎么设",
+                        "note": "",
+                        "collapsed": true,
+                        "children": [
+                          {
+                            "id": "875023ad-1240-446d-b7ec-d657c48aeb3d",
+                            "text": "EXPIRE / TTL / PERSIST",
+                            "note": "<p>EXPIRE code:138*** 300   # 300 秒后删除<br>TTL code:138***             # 还剩几秒<br>PERSIST code:138***         # 取消过期，变成永久</p>",
+                            "collapsed": false,
+                            "children": []
+                          },
+                          {
+                            "id": "4c9960c5-7e74-4031-b5a8-b293bff59469",
+                            "text": "写入时直接带过期：SETEX",
+                            "note": "<p>SETEX token:u1001 3600 \"abc123\"<br>更常用的写法，省掉一次 EXPIRE。</p>",
+                            "collapsed": false,
+                            "children": []
+                          },
+                          {
+                            "id": "db87e7a5-16ae-4ba7-8af8-5ce46703bcb2",
+                            "text": "怎么删的：惰性删除 + 定期删除",
+                            "note": "<p>两种方式配合：你访问这个 key 时顺手检查（惰性删除），加上后台每秒随机抽查一部分（定期删除）。<br>所以过期数据不一定立刻消失。</p>",
+                            "collapsed": false,
+                            "children": []
+                          },
+                          {
+                            "id": "e1694a86-8d40-4c69-abbb-87ff2929ec9e",
+                            "text": "注意：过期时间要加随机值",
+                            "note": "<p>比如 3600 + rand(300)。否则一大批 key 会在同一秒集体失效。</p>",
+                            "collapsed": false,
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "id": "a8181e5d-9c06-474f-89d9-e21374d3b5e6",
+                    "text": "主动更新",
+                    "note": "<div>编写业务逻辑，在修改数据库的同时，更新缓存。</div>",
+                    "collapsed": true,
+                    "children": [
+                      {
+                        "id": "24c43a80-feb2-4c78-aeb2-0f31dceba9d7",
+                        "text": "适合高一致性需求，并以超时剔除兜底",
+                        "note": "",
+                        "collapsed": false,
+                        "children": []
+                      },
+                      {
+                        "id": "8fb1d48e-2b26-4e22-97ea-828d4c2e5401",
+                        "text": "三种主动更新策略",
+                        "note": "",
+                        "collapsed": true,
+                        "children": [
+                          {
+                            "id": "267747a8-1108-40de-bd5c-7b5fcff6bdcc",
+                            "text": "Cache Aside Pattern",
+                            "note": "<div>由缓存的调用者，在更新数据库的同时更新缓存。</div>",
+                            "collapsed": false,
+                            "children": [
+                              {
+                                "id": "1654bf07-c5a8-4465-8183-de44bb48a9d6",
+                                "text": "读：缓存命中返回 → 未命中查库 → 回填",
+                                "note": "<p>String cached = redis.get(key);<br>if (cached != null) return JSON.parseObject(cached, Product.class);<br>Product p = productMapper.selectById(id);<br>if (p != null) redis.setex(key, 3600 + rand(300), JSON.toJSONString(p));<br>return p;</p>",
+                                "collapsed": false,
+                                "children": []
+                              },
+                              {
+                                "id": "dc17da14-3a03-40d4-bf45-a314c59efe05",
+                                "text": "写：先更新数据库 → 再删缓存",
+                                "note": "<p>注意是删除，不是更新：<br>productMapper.updateById(p);<br>redis.del(\"product:\" + p.getId());</p>",
+                                "collapsed": false,
+                                "children": []
+                              },
+                              {
+                                "id": "bb2fa778-e5af-4644-a219-8cd42dccbaec",
+                                "text": "为什么删而不是改",
+                                "note": "<p>并发下「改缓存」可能写入旧值；「删缓存」让下次读自然回源，代价只是一次冷启动查询。</p>",
+                                "collapsed": false,
+                                "children": []
+                              },
+                              {
+                                "id": "5bc8c7cb-9d69-4587-bc29-a2894bd7bc26",
+                                "text": "进阶：MQ 重试 / binlog 补偿 → 最终一致性",
+                                "note": "<p>把「删除缓存」放进消息队列重试，或用 binlog 订阅做异步补偿 —— 也就是「最终一致性」。</p>",
+                                "collapsed": false,
+                                "children": []
+                              }
+                            ]
+                          },
+                          {
+                            "id": "5f3cdc58-e2fb-427d-b433-ecd649d43fbc",
+                            "text": "Read/Write Through Pattern",
+                            "note": "<div>缓存与数据库整合为一个服务，由服务来维护一致性。调用者调用该服务，无需关心缓存一致性问题。</div>",
+                            "collapsed": false,
+                            "children": []
+                          },
+                          {
+                            "id": "3808f463-a021-4b30-8fba-79377d32bd59",
+                            "text": "Write Behind Cacheing Pattern",
+                            "note": "<div>调用者只操作缓存，由其它线程异步的将缓存数据持久化到数据库，保证最终一致。</div>",
+                            "collapsed": false,
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "8f2148be-2a90-4bd1-9885-403a53695d17",
+                "text": "大 key",
+                "note": "",
+                "collapsed": true,
+                "children": [
+                  {
+                    "id": "0a3b7cc7-ae0f-4427-b361-2026142e8535",
+                    "text": "是什么：单个 value 过大或元素过多",
+                    "note": "<p>经验值：String 超过 10KB，或集合类元素超过 5000 个，就该当成大 key 处理。</p>",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "19120864-1a36-4772-a2b3-d251ffbe9810",
+                    "text": "危害：网络阻塞、删除阻塞、集群倾斜",
+                    "note": "<p>一次读要传很久；DEL 是同步的，删几百万元素的 key 会卡住主线程；在 Cluster 里还会让某个节点内存特别高。</p>",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "b118f4e7-8890-4ba0-bf8b-f99e9c611a2e",
+                    "text": "怎么发现：redis-cli --bigkeys / MEMORY USAGE",
+                    "note": "<p>线上也可以用离线分析 RDB 的工具扫一遍。</p>",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "baa96b2e-4371-4aa2-9ad3-f280cdd6134b",
+                    "text": "怎么处理：拆分 + UNLINK 异步删",
+                    "note": "<p>按业务维度拆成多个小 key；删除用 UNLINK（后台线程回收），别用 DEL。</p>",
+                    "collapsed": false,
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "8fecfcd8-d177-4812-9925-257b57900ea6",
+                "text": "热 key",
+                "note": "",
+                "collapsed": true,
+                "children": [
+                  {
+                    "id": "d1b5e04a-1d3b-44ba-88a6-041a69e7770c",
+                    "text": "是什么：单个 key 的 QPS 特别高",
+                    "note": "<p>比如秒杀的商品详情、突发热点新闻。全站流量集中到一个 key，就会集中打到一台节点上。</p>",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "662baf57-35a7-4b66-984f-d381b41db638",
+                    "text": "危害：单节点被打满，拖垮整个实例",
+                    "note": "",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "0e52ab4a-d6cf-493c-a7d2-00dc0849adc1",
+                    "text": "怎么发现：--hotkeys（需 LFU）/ 监控 / 代理统计",
+                    "note": "<p>没有 LFU 时可以用 MONITOR 抽样，但 MONITOR 本身有性能开销，别长时间开。</p>",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "172736b3-5c40-4f08-9f92-188c9832a380",
+                    "text": "怎么处理：多级缓存 + key 打散",
+                    "note": "<p>本地缓存挡掉绝大部分；或把 key 复制成 key:1 / key:2 … 分散到不同节点；读多写少的还能做主从读写分离。</p>",
+                    "collapsed": false,
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "26aa0cb9-ebf7-498b-aa5f-10423cb62813",
+            "text": "高可用",
+            "note": "<p>三层保险：主从解决「有副本」，哨兵解决「自动接班」，Cluster 解决「装不下」。</p>",
+            "collapsed": true,
+            "children": [
+              {
+                "id": "0eca65ed-7abd-4b1b-babd-92c05282cf66",
+                "text": "第一层：主从复制",
+                "note": "",
+                "collapsed": true,
+                "children": [
+                  {
+                    "id": "a7afdf62-0175-4cfd-a879-3db2289de870",
+                    "text": "结构：主节点唯一可写，从节点只读",
+                    "note": "",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "4e03eda2-1840-4f04-b387-861e69eca0d4",
+                    "text": "写命令异步转发给所有从节点",
+                    "note": "<p>从节点上执行 REPLICAOF 主节点IP 端口 就建立了复制关系。</p>",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "e1e10507-b638-4fed-aa0a-d2008ef08649",
+                    "text": "解决了：读写分离 + 数据副本",
+                    "note": "<p>读请求分给从节点，主节点专心扛写，整体吞吐翻几倍；主节点磁盘坏了，从节点上还有一份完整数据。</p>",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "44918147-70e2-4219-8893-76199f196825",
+                    "text": "留下：主从延迟，刚写入就读可能读不到",
+                    "note": "",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "e358a4ca-95c9-4cbf-afa4-12681d17304a",
+                    "text": "留下：主节点挂了没人自动接班 → 交给哨兵",
+                    "note": "",
+                    "collapsed": false,
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "caef97f0-f257-4515-9f94-dc216ae28fff",
+                "text": "第二层：哨兵 Sentinel",
+                "note": "",
+                "collapsed": true,
+                "children": [
+                  {
+                    "id": "6ed95fda-ba78-4a92-8fa3-6e90e41356ad",
+                    "text": "① 盯着：独立进程，每秒 PING 主从探活",
+                    "note": "",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "a2769657-0a30-43d5-be65-96e7bcbbc85a",
+                    "text": "② 选新主：多哨兵确认后，挑数据最新的从节点升级",
+                    "note": "<p>主节点连续超时 → 某个哨兵判「主观下线」→ 多哨兵确认后判「客观下线」→ 投票选新主。</p>",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "8a75e565-ad08-4713-94fb-da9a6357b330",
+                    "text": "③ 通知：把新主地址推给客户端，自动连过去",
+                    "note": "<p>不用改配置、不用重启。其余从节点会自动改挂到新主上。</p>",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "bc6385a9-5c34-41cc-a42a-6a14efb56cbd",
+                    "text": "为什么至少部署 3 个（奇数）",
+                    "note": "<p>「主节点是不是真挂了」要靠多数投票决定，一个哨兵说了不算。</p>",
+                    "collapsed": false,
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "b891cfc9-07d6-4858-8737-a345cbdafe5b",
+                "text": "第三层：Cluster 分片",
+                "note": "<p>单机内存总会有上限。把整个 key 空间切成 16384 个槽，分给多台机器各管一段。</p>",
+                "collapsed": true,
+                "children": [
+                  {
+                    "id": "b820f77e-866d-4186-a56a-d9c5b29126bc",
+                    "text": "16384 个槽分给多台机器，各自管一段",
+                    "note": "",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "c0db0689-f8fc-4a0f-8e14-457db8916503",
+                    "text": "怎么找数据：CRC16(key) % 16384 → 槽 → 节点",
+                    "note": "<p>客户端会缓存「槽 → 节点」的映射表，第二次就不用再问。</p>",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "1d1ae25e-4ffc-4fa3-9f07-0165c9d27d00",
+                    "text": "扩缩容：返回 MOVED 重定向，客户端刷新缓存",
+                    "note": "",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "1cd570dd-8dca-472c-a0d0-8ab9edf1c18d",
+                    "text": "限制：别写跨节点的多 key 事务和 Lua",
+                    "note": "<p>除非用 hash tag 把它们强行分到同一个槽。</p>",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "e8927782-4a0f-4206-b0cd-d3798da32509",
+                    "text": "三种部署怎么选",
+                    "note": "<p>主从：只解决读扩展和备份，故障要人工切换。<br>哨兵：主从 + 自动故障转移，容量仍是单机上限。<br>Cluster：分片 + 高可用，能横向扩容，但限制更多。</p><p>经验法则：数据量装得下、只要高可用 → 哨兵；数据量会一直涨 → Cluster。</p>",
+                    "collapsed": false,
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "c88ff4a0-1c51-49b8-ab15-1128ace31fb2",
+            "text": "分布式锁",
+            "note": "<p>二十台服务器抢一个库存，谁来保证只有一个成功。</p>",
+            "collapsed": true,
+            "children": [
+              {
+                "id": "499f0988-bcea-4958-8e36-d7eaa70b4082",
+                "text": "为什么 synchronized 不管用了",
+                "note": "",
+                "collapsed": true,
+                "children": [
+                  {
+                    "id": "2bf8bcb1-d67f-4fda-a2db-9e20b4d5b10d",
+                    "text": "单机：线程都在一个进程，抢同一把锁对象，互斥成立",
+                    "note": "",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "661cadee-df5b-45ea-a61e-ceef6927d9c7",
+                    "text": "二十台：各自有各自的 JVM，二十把锁互不认识 = 没锁",
+                    "note": "",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "8f8316e9-d81c-4bd4-bb6b-cef271c578c7",
+                    "text": "所以要找「所有机器都看得见」的地方放锁",
+                    "note": "<p>程序里的锁作用域是「一个进程」，我们需要作用域是「整个集群」的锁。<br>Redis 是独立的外部服务，所有机器都能访问同一个 key —— 那把锁自然而然就放进了 Redis，这就是分布式锁。</p>",
+                    "collapsed": false,
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "5e726bcc-0743-485f-b098-2583105c352e",
+                "text": "第一课：一条命令加锁",
+                "note": "<p>在 Redis 里放一个 key 代表「锁被占了」。谁能写进去，谁就拿到锁。</p>",
+                "collapsed": true,
+                "children": [
+                  {
+                    "id": "6dd3a422-6876-49e8-a817-177c494a64ce",
+                    "text": "NX：key 不存在才设置，天然实现互斥",
+                    "note": "",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "dd84eeac-ccc1-4c53-924e-a2b9d760e513",
+                    "text": "EX：顺便设过期，防止程序崩了永远不释放",
+                    "note": "",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "e19d83fe-2fc1-4074-a961-ae9f65f0497d",
+                    "text": "SET lock:stock:1001 <uuid> NX EX 30",
+                    "note": "<p>Java：<br>redis.opsForValue().setIfAbsent(key, uuid, Duration.ofSeconds(30));<br>返回 true 表示抢到，null 表示没抢到。</p>",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "bce1a549-fd84-4ab7-95b1-9906ccb87549",
+                    "text": "坑 1：SET 完再 EXPIRE，中间宕机就死锁",
+                    "note": "<p>两条命令不是原子的。必须一条命令写：SET key val NX EX 30。</p>",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "4369f4f5-7dec-45cc-a15d-0b2da96a2b1d",
+                    "text": "坑 2：直接 DEL 会删掉别人的锁",
+                    "note": "<p>value 要存自己的身份标识（uuid），解锁时先比对再删。</p>",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "b050fe1d-e35b-4957-b6cc-30803efc4d3a",
+                    "text": "坑 3：业务比过期时间还长，锁提前释放",
+                    "note": "<p>需要自动续期 —— Redisson 的看门狗就是干这个的。</p>",
+                    "collapsed": false,
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "376ab439-b029-4a7d-b39a-3a0a8c26e81a",
+                "text": "一次抢购里，锁的完整生命周期",
+                "note": "",
+                "collapsed": true,
+                "children": [
+                  {
+                    "id": "5046c283-3334-4d5a-bbde-04dcd57b7edb",
+                    "text": "1 请求 A 加锁，写入成功 → 拿到锁",
+                    "note": "",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "1d31fd55-90dc-4e89-9461-501fb96aa198",
+                    "text": "2 请求 B 同时来，key 已存在 → 失败，重试或返回",
+                    "note": "",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "029c18c0-dc50-49a2-a25d-765c39f03f62",
+                    "text": "3 A 扣库存、生成订单",
+                    "note": "",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "853062f6-5eef-4a10-b838-9de77b43c676",
+                    "text": "4 A 在 finally 里解锁：比对身份 → 一致才删",
+                    "note": "<p>Lua 保证「比对 + 删除」不被别的命令打断：<br>if redis.call('GET', KEYS[1]) == ARGV[1] then<br>  return redis.call('DEL', KEYS[1])<br>else<br>  return 0<br>end</p>",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "a32ce46c-1831-409f-b3d9-9e73e92ac628",
+                    "text": "5 B 下一轮重试，拿到锁",
+                    "note": "",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "0bb1acde-0bd8-4525-8c95-a95927964c75",
+                    "text": "为什么第 4 步一定要比对身份",
+                    "note": "<p>A 的业务卡了 40 秒，锁 30 秒就过期了，B 已经拿到锁。这时 A 才回来执行 DEL —— 不比对就会把 B 的锁删掉。</p>",
+                    "collapsed": false,
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "31040842-3466-4ec7-bacf-bd64e643c85f",
+                "text": "Redisson：不要自己造轮子",
+                "note": "<p>手写锁能应付简单场景，但「业务超时锁提前释放」这个坑绕不过去。Redisson 是 Redis 的 Java 客户端，把这些坑都替你填好了。</p>",
+                "collapsed": true,
+                "children": [
+                  {
+                    "id": "10dd4c46-d4ba-4bad-99d9-185d1291589b",
+                    "text": "看门狗：默认 30 秒，每 10 秒自动续期",
+                    "note": "<p>RLock lock = redisson.getLock(\"lock:stock:1001\");<br>lock.tryLock(3, TimeUnit.SECONDS);   // 不传 leaseTime → 看门狗续期<br>try { doBusiness(); }<br>finally { if (lock.isHeldByCurrentThread()) lock.unlock(); }</p><p>程序真挂了，续期停止，锁自然到期释放。</p>",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "e16e8bf3-b996-4c11-a276-09736eb2af83",
+                    "text": "可重入：底层是 Hash {线程ID: 次数}",
+                    "note": "",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "79b8848c-839b-4eaf-bafe-2f5bc3b4e6ae",
+                    "text": "一整套同步器：读写锁 / 信号量 / 倒计时门闩",
+                    "note": "<p>用法和 JDK 几乎一样 —— 把单机的并发工具变成跨机器的并发工具。</p>",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "b0dc7035-e30c-4856-a47d-f6c919fd8016",
+                    "text": "RedLock（了解即可）：5 个节点多数成功才算成功",
+                    "note": "<p>怕「主从切换丢锁」才用它。安全性有争议，一般业务别用，知道即可。</p>",
+                    "collapsed": false,
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "8dfdb99b-a5c2-467f-8ab0-fc9a274fd736",
+            "text": "消息队列",
+            "note": "<p>一秒钟涌进十万请求，怎么让数据库活下来。系统要面对的不是平均值，而是那个尖峰。</p>",
+            "collapsed": true,
+            "children": [
+              {
+                "id": "14abfe90-e1c6-447b-bc16-50fb6cab8c00",
+                "text": "为什么要用：削峰填谷",
+                "note": "",
+                "collapsed": true,
+                "children": [
+                  {
+                    "id": "08447a78-1012-41bb-aeb7-fc3e6c249d44",
+                    "text": "峰值 10 万 QPS，平时 5000，只持续两秒",
+                    "note": "<p>秒杀开始那一秒、整点抢券那一瞬。峰值是平均值的 20 倍。</p>",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "01625383-0ec6-459d-8dea-b69c4b36b6e7",
+                    "text": "一个普通 MySQL 实例只能稳 4000 QPS",
+                    "note": "<p>不是它「不行」，而是每一条写都要保证事务、刷盘、主从同步。快不了，也不该快。</p>",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "8de17f08-833a-4486-85ac-c664ca552926",
+                    "text": "削峰填谷：不拒绝请求，只是让它们排个队",
+                    "note": "<p>把「立刻下单」改成「立刻登记，稍后处理」。<br>请求先写进队列（内存操作，极快），后端再按数据库扛得住的节奏匀速从队列里取出来处理。<br>请求被堆到峰后慢慢消化，数据库看到的永远是平缓的水位。</p>",
+                    "collapsed": false,
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "4b9a1d1f-5d7a-41a9-b1d6-4f2954f98a03",
+                "text": "老办法 1：List 当队列（LPUSH + BRPOP）",
+                "note": "<p>生产者从左边塞，消费者从右边取。BRPOP 的 B 表示「没有就阻塞等待」，不用自己写轮询。</p>",
+                "collapsed": true,
+                "children": [
+                  {
+                    "id": "3ee26ce3-2247-4bdf-b478-224c16294233",
+                    "text": "LPUSH 塞任务，BRPOP 阻塞取",
+                    "note": "<p># 生产者：塞一个订单任务<br>LPUSH queue:order '{\"orderId\":10001}'</p><p># 消费者：阻塞式获取，最长等 5 秒<br>BRPOP queue:order 5</p>",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "699bd447-d628-4eb6-99ad-a4022b63f95b",
+                    "text": "短板：弹出即消失，消费者崩了就永久丢",
+                    "note": "<p>消息被弹出后就从队列里消失了。消费者拿到一半崩了，这条任务就永久丢失，没有任何重试机制。</p>",
+                    "collapsed": false,
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "fbbb085b-d90c-4601-be66-63267b7062d1",
+                "text": "老办法 2：发布订阅 Pub/Sub",
+                "note": "<p>像一个广播电台：一个频道，所有订阅者同时收到同一条消息。适合通知类场景。</p>",
+                "collapsed": true,
+                "children": [
+                  {
+                    "id": "c38baa5e-4dd7-4a50-9f17-0d46a276d578",
+                    "text": "SUBSCRIBE 订阅频道，PUBLISH 发消息",
+                    "note": "<p># 一个客户端订阅<br>SUBSCRIBE config:refresh</p><p># 另一个客户端发消息<br>PUBLISH config:refresh \"v2.3\"<br># =&gt; 所有订阅者立刻收到</p>",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "d3e01d39-f9f8-4c8e-9373-47697e7d2ee6",
+                    "text": "短板：消息完全不落地",
+                    "note": "<p>没人订阅就直接丢弃，客户端断线期间的消息也收不到。它不能当任务队列用。</p>",
+                    "collapsed": false,
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "cac5e4d4-bd6c-4e35-87bf-4fa271702e05",
+                "text": "Stream：Redis 自带的专业消息队列",
+                "note": "<p>Redis 5.0 引入，专门做消息队列的数据结构。像一条只会往后追加的日志：每条消息有自增 ID，写进去就一直在那儿，直到你主动删。</p>",
+                "collapsed": true,
+                "children": [
+                  {
+                    "id": "e604248d-865b-425f-8563-d09bd93f478c",
+                    "text": "XADD：追加一条消息，返回它的 ID",
+                    "note": "<p>XADD stream:order * orderId 10001 amount 99.5<br>=&gt; \"1696060800000-0\"   （毫秒时间戳-序号）</p><p>* 表示让 Redis 自动生成 ID。</p>",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "9d4135c2-40f3-45bb-8940-21cd25f2c133",
+                    "text": "XREAD：读取消息，可以阻塞等新消息",
+                    "note": "<p>XREAD BLOCK 2000 STREAMS stream:order $<br>最多等 2000 毫秒，$ 表示只等新消息。</p>",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "bee9d015-7a4e-45f7-98aa-b47eb3125538",
+                    "text": "XLEN / XRANGE：看长度、按区间回溯历史",
+                    "note": "<p>XLEN stream:order<br>XRANGE stream:order - +</p><p>注意：读完之后消息不会被删掉。</p>",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "722d364c-9e72-42e7-a8fe-dfd399541d30",
+                    "text": "XTRIM：裁剪，只保留最近 N 条",
+                    "note": "<p>XTRIM stream:order MAXLEN 1000<br>防止内存涨爆。</p>",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "83314c55-d5cd-4298-8d52-a0c2b5a4bdc9",
+                    "text": "关键区别：读完不删，它记着「谁读到了哪」",
+                    "note": "<p>这正是它比 List 可靠的地方 —— 所以能重放、能重试。</p>",
+                    "collapsed": false,
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "c035f632-f053-4771-9a5c-89ef8816b40a",
+                "text": "消费者组：一群人分工，且一条都不丢",
+                "note": "<p>三个消费者组成一个组，同一个组里的成员不会重复拿到同一条消息。</p>",
+                "collapsed": true,
+                "children": [
+                  {
+                    "id": "c6a2e756-7438-40c3-967e-456ba244690b",
+                    "text": "1 组创建后，每条新消息被分给组里某个成员",
+                    "note": "<p>XGROUP CREATE stream:order g1 $ MKSTREAM<br>XREADGROUP GROUP g1 c1 COUNT 10 STREAMS stream:order &gt;</p><p>&gt; 表示只要新的。XINFO GROUPS stream:order 看组信息。</p>",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "909c7654-d7a1-423f-8ae6-048f344a7756",
+                    "text": "2 消息不立刻删除，进入该成员的「待确认列表」",
+                    "note": "",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "4525ae58-0df0-4109-80ff-2397fb22fdd5",
+                    "text": "3 业务处理成功后发 XACK 确认",
+                    "note": "<p>XACK stream:order g1 1696060800000-0<br>=&gt; 1</p>",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "d6ae1aa8-bdad-491b-a6f5-baf80f5ac045",
+                    "text": "4 成员崩溃没确认，消息留在 Pending 列表",
+                    "note": "<p>XPENDING stream:order g1<br>=&gt; 总共 2 条，最小 ID …，c1 名下 2 条</p>",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "3e212bfb-d7e0-4258-a0bd-fc1e033d964b",
+                    "text": "5 用 XAUTOCLAIM 把超时消息转给别人重做",
+                    "note": "<p>XAUTOCLAIM stream:order g1 c2 60000 0-0<br>把空闲超过 60 秒的消息转给自己重做。</p>",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "f9b589fc-e909-4af1-8e6e-fe3a4eb53689",
+                    "text": "这套机制 = Kafka / RocketMQ 的 ACK + 重平衡简化版",
+                    "note": "<p>「投递 → 确认 → 超时转移」，理解了 Stream，再学专业 MQ 会很轻松。</p>",
+                    "collapsed": false,
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "c8a14e44-0b96-4028-a8de-f2e9756a88d0",
+            "text": "事务与 Lua",
+            "note": "",
+            "collapsed": true,
+            "children": [
+              {
+                "id": "f1a269d5-b410-4392-ab6f-1e8eb96bf1cf",
+                "text": "为什么需要脚本：两个动作之间的空隙",
+                "note": "",
+                "collapsed": true,
+                "children": [
+                  {
+                    "id": "0ae06b0d-df60-4fef-b8a2-f24f81a2db9b",
+                    "text": "反例：先 GET、再判断、最后 DECR",
+                    "note": "<p></p><pre data-lang=\"java\"><code class=\"language-java\">int stock = Integer.parseInt(redis.get(\"stock\"));\nif (stock &gt; 0) { redis.decr(\"stock\"); } // ← 危险</code></pre><p><span>两个请求可能同时读到 stock=1，都通过判断，都执行扣减 —— 库存变成 -1。</span></p>",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "58e2c534-2360-4557-b0aa-b1c791492c27",
+                    "text": "原子性从哪来：Redis 单线程，一口气执行完整个脚本",
+                    "note": "<p>把「判断 + 扣减」写成一个脚本发给 Redis，中间不会处理别的命令。</p>",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "8df27089-ff0f-4b89-a81f-0f38546d2d0b",
+                    "text": "三条使用纪律",
+                    "note": "",
+                    "collapsed": false,
+                    "children": [
+                      {
+                        "id": "d6506b98-d547-4830-a731-8ef32ef558ce",
+                        "text": "用 KEYS[] / ARGV[] 传参，别把参数拼进脚本字符串",
+                        "note": "",
+                        "collapsed": false,
+                        "children": []
+                      },
+                      {
+                        "id": "0eb2fdfd-f14b-424b-bccb-99cc498279d1",
+                        "text": "脚本要短 —— 它会阻塞 Redis 的单线程",
+                        "note": "",
+                        "collapsed": false,
+                        "children": []
+                      },
+                      {
+                        "id": "356dcc72-5068-4908-bf79-b120dd2dfe13",
+                        "text": "生产环境用 EVALSHA 复用已加载的脚本",
+                        "note": "",
+                        "collapsed": false,
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "6fbc6fb7-7a12-43f7-b51c-f49171f5bc7b",
+                "text": "脚本 1：一人一单，防重复抢购",
+                "note": "<p>判断「这个人是不是已经买过」和「扣库存」必须在同一步完成，否则同一个人并发下能抢到两单。</p>",
+                "collapsed": true,
+                "children": [
+                  {
+                    "id": "0f93a13a-36e9-4d53-a1a4-f20f07d73050",
+                    "text": "SISMEMBER 判重 → 查库存 → DECR + SADD",
+                    "note": "<p></p><pre data-lang=\"javascript\"><code class=\"language-javascript\">if redis.call('SISMEMBER', KEYS[2], ARGV[1]) == 1 then return -2 end\nlocal stock = tonumber(redis.call('GET', KEYS[1]))\nif stock == nil then return -1 end\nif stock &lt;= 0 then return 0 end\nredis.call('DECR', KEYS[1])\nredis.call('SADD', KEYS[2], ARGV[1])\nreturn 1</code></pre><p><br></p>",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "3116b929-f638-4ccd-b806-aafc6fe8499f",
+                    "text": "返回码：1 成功 / 0 售罄 / -1 不存在 / -2 重复",
+                    "note": "",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "197553bc-f623-442c-be7d-91eeca186739",
+                    "text": "为什么压在一个脚本里",
+                    "note": "<p>用 Set 存「是否买过」，天然去重；整个逻辑在一个脚本里，就不会出现「查过没买、扣完发现买过」的中间态。</p>",
+                    "collapsed": false,
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "cca4a22b-61c7-458d-950f-d249773c2d3a",
+                "text": "脚本 2：固定窗口限流",
+                "note": "<p>每个用户每秒最多发 5 次请求，超了就拒绝。用「计数器 + 过期时间」实现固定窗口最简单。</p>",
+                "collapsed": true,
+                "children": [
+                  {
+                    "id": "6fcf6f54-be3d-4525-9fa4-a57f750a0293",
+                    "text": "INCR 计数，第一次进来才设 EXPIRE",
+                    "note": "<p></p><pre data-lang=\"javascript\"><code class=\"language-javascript\">local current = redis.call('INCR', KEYS[1])\nif current == 1 then\nredis.call('EXPIRE', KEYS[1], ARGV[1])\nend\nif current &gt; tonumber(ARGV[2]) then return 0 end\nreturn 1\n\nkey = \"limit:sms:\" + userId；参数：60 秒内最多 5 次。</code></pre><p><br></p>",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "b0ad5c6e-7f0a-4369-8272-a83c7446b0f2",
+                    "text": "超过上限 return 0，直接拒绝",
+                    "note": "",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "c4175630-3882-4541-8ea2-b5ec64c428d8",
+                    "text": "进阶：滑动窗口（ZSet 存时间戳）或令牌桶",
+                    "note": "<p>思路一样 —— 把「计数 + 判断 + 设置过期」这一串动作交给脚本一次做完。</p>",
+                    "collapsed": false,
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "337d93de-d56f-4a35-bcf8-0db748d7e448",
+                "text": "事务：MULTI / EXEC / WATCH",
+                "note": "",
+                "collapsed": true,
+                "children": [
+                  {
+                    "id": "e972970b-83a3-4244-b9aa-f0966a201873",
+                    "text": "MULTI 开启，后续命令入队返回 QUEUED",
+                    "note": "",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "349bc36c-0b8f-4d46-9819-da47268e2ec4",
+                    "text": "EXEC 一次性顺序执行，中间不插别的命令",
+                    "note": "",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "e5c88d7a-c38e-4d54-bf30-bce7e617fc31",
+                    "text": "DISCARD：放弃整个事务",
+                    "note": "",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "8cb95fd0-9341-4ed4-a221-af49b292b559",
+                    "text": "WATCH：乐观锁，被改过就整个不执行",
+                    "note": "<p>EXEC 前如果被 WATCH 的 key 被别的客户端改过，EXEC 返回 nil，事务作废。</p>",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "1a562326-698a-4ba6-9c43-5872c55af24a",
+                    "text": "不支持回滚：一条命令运行时报错，其余照跑",
+                    "note": "<p>和关系型数据库不一样。语法错误在入队时就会报错、整个事务作废；但运行时错误（比如对 String 执行 LPUSH）只影响那一条。</p>",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "e7e641e4-ae88-4e79-b9fa-7a5cdcf456ed",
+                    "text": "和 Lua 的区别：事务里拿不到中间结果",
+                    "note": "<p>事务是先攒着一起发，没法「根据上一条的结果决定下一条」。Lua 可以读结果做判断，所以库存扣减那类逻辑用脚本。</p>",
+                    "collapsed": false,
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "e632d562-4026-41b7-804b-83fab64f0bf0",
+            "text": "线程模型与性能",
+            "note": "<p>单线程是 Redis 快的原因，也是它最怕慢命令的原因。</p>",
+            "collapsed": true,
+            "children": [
+              {
+                "id": "cfa46ceb-b022-4300-9769-85382fc1fa96",
+                "text": "为什么快：单线程 + IO 多路复用",
+                "note": "",
+                "collapsed": false,
+                "children": [
+                  {
+                    "id": "67cec7d2-1158-4ea0-9642-cd4175d4a3bc",
+                    "text": "纯内存操作，不走磁盘",
+                    "note": "",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "2e0abc1b-54f3-4e0e-92a4-7cdc8ab5a409",
+                    "text": "单线程，没有锁竞争和线程切换",
+                    "note": "",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "dee9a31f-5c6c-4eb9-92a7-03f55ff17e34",
+                    "text": "epoll 多路复用：一个线程盯上万个连接",
+                    "note": "<p>不是「一个连接一个线程」，而是事件驱动：谁有数据就处理谁。</p>",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "a8f4512c-8121-40cc-9a9e-e9cddeb12e25",
+                    "text": "瓶颈在内存和网络，不在 CPU",
+                    "note": "",
+                    "collapsed": false,
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "9b8c1709-fcac-4fc2-a5eb-f1834ea33c55",
+                "text": "「单线程」只指命令执行",
+                "note": "<p>网络 IO 在 6.0 后可以多线程；持久化 fork 子进程；删除大 key 有 lazy free 后台线程；AOF fsync 也有后台线程。</p>",
+                "collapsed": false,
+                "children": []
+              },
+              {
+                "id": "368a1dfa-a4d3-47ce-b5b9-c18bfadb16db",
+                "text": "Redis 6 的多线程 IO",
+                "note": "",
+                "collapsed": false,
+                "children": [
+                  {
+                    "id": "66206ed5-3d51-4cb2-a37c-4110b795f664",
+                    "text": "并行的只是「读请求、写响应」这一步",
+                    "note": "",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "179625e8-0208-469b-9015-1c76f94a139d",
+                    "text": "命令执行仍然单线程，所以原子性不变",
+                    "note": "",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "df4d03ac-a1c6-467c-bcba-a539f98e4dc9",
+                    "text": "默认关闭，io-threads 一般配 4",
+                    "note": "",
+                    "collapsed": false,
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "68a0478a-42f1-47e9-83b3-9d61cbebbab3",
+                "text": "慢查询与 pipeline",
+                "note": "",
+                "collapsed": false,
+                "children": [
+                  {
+                    "id": "db09af3e-b583-425f-8101-f825efd978ad",
+                    "text": "慢查询日志：slowlog-log-slower-than",
+                    "note": "<p>单位微秒，默认 10000（10ms）。slowlog-max-len 控制保留条数。</p>",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "54163aec-4d8b-4b27-8c13-882e4fdaa984",
+                    "text": "pipeline：省 RTT，但不保证原子性",
+                    "note": "<p>一次发一批命令、一次收一批结果。中间可能插入别的客户端命令。</p>",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "01089ff4-7c61-4313-ba43-751d84fd1dc9",
+                    "text": "生产禁用 KEYS *、FLUSHALL",
+                    "note": "<p>O(N) 命令会阻塞整个单线程。用 SCAN 代替 KEYS。</p>",
+                    "collapsed": false,
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "6761c58a-6e7e-44e4-9759-4a594c230eb5",
+                "text": "单线程的代价：一条慢命令卡住所有人",
+                "note": "<p>所以 04 里说「脚本要短」—— Lua 也是在这个单线程里跑的。</p>",
+                "collapsed": false,
+                "children": []
+              }
+            ]
+          },
+          {
+            "id": "5738617a-8c92-4578-a127-be34f389b1f0",
+            "text": "收尾：在真实系统里的位置",
+            "note": "<p>前面六章的能力放回同一张图 —— 它们不是六个独立的技术，而是同一个系统里的六个岗位。</p>",
+            "collapsed": true,
+            "children": [
+              {
+                "id": "e97e9764-7888-46db-bd63-9004c31cf18b",
+                "text": "接入层：负载均衡 → API 网关（限流、鉴权、路由）",
+                "note": "",
+                "collapsed": false,
+                "children": []
+              },
+              {
+                "id": "c9834a9e-80fb-4258-9f4a-acbe53c641b6",
+                "text": "应用层：应用实例 1 / 2 / 3",
+                "note": "",
+                "collapsed": false,
+                "children": []
+              },
+              {
+                "id": "07189c8d-0b3c-4d6a-80e5-0c28ad0325ab",
+                "text": "数据层：缓存 / 队列 / 锁与计数 / MySQL",
+                "note": "",
+                "collapsed": false,
+                "children": [
+                  {
+                    "id": "acc21871-48ac-4f71-b47c-a604abdf81d2",
+                    "text": "缓存：商品详情、用户信息、热点数据",
+                    "note": "<p>主从 + 哨兵保证可用；缓存穿透 / 雪崩要防。</p>",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "a1c02bb9-04c5-4cfb-a762-36cb13331087",
+                    "text": "队列：下单、发短信、生成报表等异步任务",
+                    "note": "<p>Stream 消费者组 + XACK 保证一条不丢。</p>",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "3076d708-f590-475f-91f5-b8f3b5660be4",
+                    "text": "锁与计数：分布式锁、库存扣减、限流、排行",
+                    "note": "<p>SET NX EX + Lua 保证原子性。</p>",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "bb694f81-b8e8-432b-8e24-61a83d1ffe89",
+                    "text": "MySQL：订单、支付、账户 —— 一切不能丢的数据",
+                    "note": "<p>始终是最终的数据来源。</p>",
+                    "collapsed": false,
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "9339a6a4-05ba-4d23-b074-2d20c211cb45",
+            "text": "案例",
+            "note": "",
+            "collapsed": false,
+            "children": [
+              {
+                "id": "349b1267-362f-4fc8-a43e-ce7af6e8ecd7",
+                "text": "优惠券秒杀",
+                "note": "",
+                "collapsed": true,
+                "children": [
+                  {
+                    "id": "4f7f332d-0f64-4d98-9275-e334d06a6e51",
+                    "text": "全局 ID 生成器",
+                    "note": "",
+                    "collapsed": false,
+                    "children": [
+                      {
+                        "id": "b77110f0-0740-4c38-8da0-cfd54bfb4709",
+                        "text": "原因",
+                        "note": "<div>为了增加 ID 的安全性，不直接使用 Redis 自增的数值，而是拼接一些其他信息。</div>",
+                        "collapsed": false,
+                        "children": []
+                      },
+                      {
+                        "id": "dcc3c618-422a-4bdc-bd20-291687a14f3b",
+                        "text": "方案",
+                        "note": "<div>1 bit 符号位 + 31 bit 时间戳 + 32 bit 序列号。<br>类似雪花算法</div>",
+                        "collapsed": false,
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "id": "426eb9e0-0628-4567-bc4d-56a266c00615",
+                    "text": "超卖问题",
+                    "note": "<div>超卖问题是典型的多线程安全问题，针对这一问题的常见解决方案就是加锁。</div>",
+                    "collapsed": false,
+                    "children": [
+                      {
+                        "id": "7bf0c860-34fe-41b3-ab60-64cd236ac987",
+                        "text": "悲观锁",
+                        "note": "<div>认为线程安全问题一定会发生，因此在操作数据之前先获取锁，确保线程串行执行。<br>如 Synchronized、Lock 都属于悲观锁。</div>",
+                        "collapsed": false,
+                        "children": []
+                      },
+                      {
+                        "id": "37d007fc-d59a-4b3a-9d50-043232f3b12d",
+                        "text": "乐观锁",
+                        "note": "<div>认为线程安全问题不一定会发生，因此不加锁，只是在更新数据时去判断有没有其它线程对数据做了修改。</div><ul><li>如果没有修改则认为是安全的，自己才更新数据。</li><li>如果已经被其它线程修改说明发生了安全问题，此时可以重试或异常。</li></ul><div>因此其关键是判断之前查询到的数据是否有被修改过<br>有两种方法，思想一样</div>",
+                        "collapsed": false,
+                        "children": [
+                          {
+                            "id": "61a3907b-1c7b-4d15-8b21-e4d3989a2ddc",
+                            "text": "版本号法",
+                            "note": "<div>需要存一个版本号字段，每次更新，版本号会被同步更新</div>",
+                            "collapsed": false,
+                            "children": [
+                              {
+                                "id": "3986f354-4d28-45a7-b148-98a2a0b2fad3",
+                                "text": "未命名",
+                                "note": "",
+                                "collapsed": false,
+                                "children": []
+                              }
+                            ]
+                          },
+                          {
+                            "id": "bc50f389-8f25-48ea-bf34-e319539c51c2",
+                            "text": "CAS法",
+                            "note": "<div>由于库存和版本号同时更新，因此直接用库存代表版本号，省去了版本号字段</div>",
+                            "collapsed": false,
+                            "children": [
+                              {
+                                "id": "f1f21865-b97a-4754-9188-e17f96756fc1",
+                                "text": "未命名",
+                                "note": "",
+                                "collapsed": false,
+                                "children": []
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "id": "c66bb4c1-01d6-45de-8699-23ece09c43ac",
+                    "text": "一人一单",
+                    "note": "<div>需求：修改秒杀业务，要求同一个优惠券，一个用户只能下一单。</div>",
+                    "collapsed": false,
+                    "children": [
+                      {
+                        "id": "eff56190-b29c-438e-939d-2fc6d59e2169",
+                        "text": "未命名",
+                        "note": "",
+                        "collapsed": false,
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "id": "e5a10ba5-8ec7-42ab-8012-52917e6831de",
+                    "text": "分布式锁",
+                    "note": "<div>分布式锁：满足分布式系统或集群模式下多进程可见并且互斥的锁。</div>",
+                    "collapsed": false,
+                    "children": [
+                      {
+                        "id": "af60e517-f2cd-4220-813d-a3a64427bf7a",
+                        "text": "实现方式",
+                        "note": "<div>分布式锁的核心是实现多进程之间互斥</div>",
+                        "collapsed": false,
+                        "children": [
+                          {
+                            "id": "f5262a2e-1c95-4626-a5a0-2db20d85cc65",
+                            "text": "MySQL",
+                            "note": "",
+                            "collapsed": false,
+                            "children": []
+                          },
+                          {
+                            "id": "40425d1e-8bc3-44f8-9420-c092896c5530",
+                            "text": "Redis",
+                            "note": "",
+                            "collapsed": false,
+                            "children": []
+                          },
+                          {
+                            "id": "2a2e1e09-77fa-43cc-886c-83b0f9970fa0",
+                            "text": "Zookeeper",
+                            "note": "",
+                            "collapsed": false,
+                            "children": []
+                          }
+                        ]
+                      },
+                      {
+                        "id": "4a7f43a3-5723-4946-afd9-f8686193f676",
+                        "text": "基于Redis的分布式锁",
+                        "note": "<div>基于 Redis 的分布式锁的实现思路：</div><ul><li>利用 set nx ex 获取锁，并设置过期时间，保存线程标识</li><li>释放锁时先判断线程标识是否与自己一致，一致则删除锁（key: prefix+user_id, value: uuid+thread_id）</li></ul><div>特性：</div><ul><li>利用 set nx 满足互斥性</li><li>利用 set ex 保证故障时锁依然能释放，避免死锁，提高安全性</li><li>利用 Redis 集群保证高可用和高并发特性</li></ul>",
+                        "collapsed": true,
+                        "children": [
+                          {
+                            "id": "5e287469-4473-4784-ab07-0e35df6fe59c",
+                            "text": "获取锁",
+                            "note": "",
+                            "collapsed": false,
+                            "children": [
+                              {
+                                "id": "82aa05a6-029e-4df3-919e-e9fdec95ec35",
+                                "text": "利用 setnx 的互斥特性",
+                                "note": "<div>setnx 命令无法同时加过期时间，因此要通过 set 命令加参数实现。<br># NX 是互斥，EX 是设置超时时间<br>SET lock thread1 NX EX 10</div>",
+                                "collapsed": false,
+                                "children": []
+                              }
+                            ]
+                          },
+                          {
+                            "id": "34271ef0-f13d-4573-9010-0a514e7d9f41",
+                            "text": "释放锁",
+                            "note": "",
+                            "collapsed": false,
+                            "children": [
+                              {
+                                "id": "8f6e50e0-4be9-4441-9816-bf785b5d152f",
+                                "text": "手动释放",
+                                "note": "",
+                                "collapsed": false,
+                                "children": []
+                              },
+                              {
+                                "id": "5bf091fc-cfcc-414e-ad9a-81bc1b686a97",
+                                "text": "超时释放：获取锁时添加一个超时时间",
+                                "note": "",
+                                "collapsed": false,
+                                "children": []
+                              }
+                            ]
+                          },
+                          {
+                            "id": "c8ee00fd-e331-438f-8a15-4d9e33c6b507",
+                            "text": "基于Redis分布式锁的误删问题",
+                            "note": "<div>同一个用户的多个线程：</div><ul><li>线程1阻塞，业务还没完，锁的超时时间到了，锁过期被删了</li><li>线程2拿到锁执行业务，还没执行完时，线程1被唤醒后执行完业务，主动去释放锁，但此时释放的是线程2的锁，即线程2业务执行完之前锁就被释放了，那么它执行完业务后释放的锁可能是别的线程的 ......</li></ul><div>因此在释放锁时，需要判断锁是否是自己的</div>",
+                            "collapsed": false,
+                            "children": [
+                              {
+                                "id": "4222a50d-e471-4991-88af-31f769357eee",
+                                "text": "未命名",
+                                "note": "",
+                                "collapsed": false,
+                                "children": []
+                              },
+                              {
+                                "id": "439e7711-028b-4f12-9064-98e63d3df845",
+                                "text": "解决",
+                                "note": "",
+                                "collapsed": false,
+                                "children": [
+                                  {
+                                    "id": "86ad87a2-cc38-4967-b738-6fc05917c8b3",
+                                    "text": "未命名",
+                                    "note": "",
+                                    "collapsed": false,
+                                    "children": []
+                                  },
+                                  {
+                                    "id": "f0300d36-926d-4b9e-b608-c71cd2919e64",
+                                    "text": "方案",
+                                    "note": "<ol><li>在获取锁时存入线程标识（可以用UUID表示，区分不同 JVM，因为不同JVM的线程id可能重复）；</li><li>在释放锁时先获取锁中的线程标识，判断是否与当前线程标识一致<ul><li>如果一致则释放锁；</li><li>如果不一致则不释放锁；</li></ul></li></ol>",
+                                    "collapsed": false,
+                                    "children": []
+                                  }
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "id": "cbe8d9db-f92f-4da2-a0db-a89a2377dbf0",
+                            "text": "分布式锁的原子性问题",
+                            "note": "<div><strong>判断锁标识</strong>和<strong>释放锁</strong>是两个步骤，如果在这之间线程发生阻塞以至于锁被超时释放，而其它线程获取到了锁，那么原线程就可能释放其它线程的锁。<br>因此需要让 判断锁与释放锁成为一个原子操作。</div>",
+                            "collapsed": false,
+                            "children": [
+                              {
+                                "id": "6717a3b9-c78e-4974-a188-3c456eec844c",
+                                "text": "Redis的Lua脚本",
+                                "note": "<div>Redis 提供了 Lua 脚本功能，在于给脚本中编写多条 Redis 命令，确保多条命令执行时的原子性。</div>",
+                                "collapsed": false,
+                                "children": [
+                                  {
+                                    "id": "91ea71e5-f718-4355-9fad-57e6bd99a591",
+                                    "text": "未命名",
+                                    "note": "",
+                                    "collapsed": false,
+                                    "children": []
+                                  },
+                                  {
+                                    "id": "0a9c041c-d568-45fa-8d04-052ac49f64ad",
+                                    "text": "未命名",
+                                    "note": "",
+                                    "collapsed": false,
+                                    "children": []
+                                  },
+                                  {
+                                    "id": "b64726bb-ac7e-4e33-84e0-92619b804e50",
+                                    "text": "未命名",
+                                    "note": "<pre>--[[unlock.lua]]\n--[[比较线程标识与锁中的标识是否一致]]\nif (<em>redis</em>.<em>call</em>('get', <em>KEYS</em>[1]) == <em>ARGV</em>[1]) then\n    --[[释放锁 del key]]\n    return <em>redis</em>.<em>call</em>('del', <em>KEYS</em>[1])\nend\nreturn 0</pre><div><br><br></div><pre>@Override\npublic void unlock() {\n    // 调用 lua 脚本\n    stringRedisTemplate.execute(\n            <em>UNLOCK_SCRIPT</em>,\n            Collections.<em>singletonList</em>(<em>KEY_PREFIX </em>+ name),\n            <em>ID_PREFIX </em>+ Thread.<em>currentThread</em>().getId()\n    );\n}</pre>",
+                                    "collapsed": false,
+                                    "children": []
+                                  }
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "id": "ee467add-0e98-490b-a3c6-d5cdf4e8f79b",
+                            "text": "Redisson",
+                            "note": "",
+                            "collapsed": false,
+                            "children": [
+                              {
+                                "id": "14922003-065c-47d0-b962-5795b534ee68",
+                                "text": "基于 setnx 实现的分布式锁的问题",
+                                "note": "",
+                                "collapsed": true,
+                                "children": [
+                                  {
+                                    "id": "170d25cb-027e-406e-9e57-5c3b419c9439",
+                                    "text": "不可重入",
+                                    "note": "<div>同一个线程无法多次获取同一把锁</div>",
+                                    "collapsed": false,
+                                    "children": []
+                                  },
+                                  {
+                                    "id": "7fa5ccdd-8b4a-4966-9c35-17406e81a99e",
+                                    "text": "不可重试",
+                                    "note": "<div>获取锁只尝试一次就返回 false，没有重试机制</div>",
+                                    "collapsed": false,
+                                    "children": []
+                                  },
+                                  {
+                                    "id": "2082d7d4-64cc-414c-924c-6163ff96ec89",
+                                    "text": "超时释放",
+                                    "note": "<div>锁超时释放虽然可以避免死锁，但如果是业务执行耗时较长，也会导致锁释放，存在安全隐患。</div>",
+                                    "collapsed": false,
+                                    "children": []
+                                  },
+                                  {
+                                    "id": "ac1e9085-ee73-4101-9c34-49702eb9de7d",
+                                    "text": "主从一致性",
+                                    "note": "<div>如果 Redis 提供了主从集群，主从同步存在延迟。<br>当主宕机时，如果从还没来得及同步主的锁数据，则会被趁虚而入。</div>",
+                                    "collapsed": false,
+                                    "children": []
+                                  }
+                                ]
+                              },
+                              {
+                                "id": "b2208d08-06e7-4a1b-a79e-a7c175df5823",
+                                "text": "Redisson",
+                                "note": "<div>Redisson 是一个在 Redis 的基础上实现的 Java 驻内存数据网格（In-Memory Data Grid）。<br>它不仅提供了一系列的分布式的 Java 常用对象，还提供了许多分布式服务，其中就包含了各种分布式锁的实现。</div>",
+                                "collapsed": true,
+                                "children": [
+                                  {
+                                    "id": "3848ac53-61a5-4995-9940-b21a93e8cb49",
+                                    "text": "分布式锁和同步器",
+                                    "note": "",
+                                    "collapsed": false,
+                                    "children": [
+                                      {
+                                        "id": "d40a9469-d381-4251-8d0b-589327bfb7e8",
+                                        "text": "可重入锁（Reentrant Lock）",
+                                        "note": "",
+                                        "collapsed": false,
+                                        "children": [
+                                          {
+                                            "id": "0e7424bf-d1d6-4573-9a56-60190fac7f6e",
+                                            "text": "原理",
+                                            "note": "",
+                                            "collapsed": false,
+                                            "children": [
+                                              {
+                                                "id": "8fed3818-52df-4370-a001-8d7686233b51",
+                                                "text": "Redis 哈希结构实现锁计数",
+                                                "note": "",
+                                                "collapsed": false,
+                                                "children": []
+                                              },
+                                              {
+                                                "id": "df31e677-66a6-4db7-a163-2954dfb013a5",
+                                                "text": "未命名",
+                                                "note": "",
+                                                "collapsed": false,
+                                                "children": []
+                                              },
+                                              {
+                                                "id": "17e7c488-7e2c-4f47-a928-8bc3119078be",
+                                                "text": "未命名",
+                                                "note": "",
+                                                "collapsed": false,
+                                                "children": []
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      },
+                                      {
+                                        "id": "2c0af9cd-50ce-464b-9404-dfc777f45d77",
+                                        "text": "公平锁（Fair Lock）",
+                                        "note": "",
+                                        "collapsed": false,
+                                        "children": []
+                                      },
+                                      {
+                                        "id": "76e1dab3-f455-413f-99cc-4c4257913230",
+                                        "text": "联锁（MultiLock）",
+                                        "note": "",
+                                        "collapsed": false,
+                                        "children": [
+                                          {
+                                            "id": "17de2b2f-2865-476f-8b57-65252c6bddfd",
+                                            "text": "原理",
+                                            "note": "",
+                                            "collapsed": false,
+                                            "children": [
+                                              {
+                                                "id": "7ddaf72f-a80c-4ea2-8c78-5eced268c39b",
+                                                "text": "多个独立的Redis节点，必须在所有节点都获取冲入锁，才算获取锁成功",
+                                                "note": "",
+                                                "collapsed": false,
+                                                "children": []
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      },
+                                      {
+                                        "id": "1b7e4b26-989d-4652-b07b-987bc1476d37",
+                                        "text": "红锁（RedLock）",
+                                        "note": "",
+                                        "collapsed": false,
+                                        "children": []
+                                      },
+                                      {
+                                        "id": "08ed6710-7b51-4971-b442-da9ef4a1f8da",
+                                        "text": "读写锁（ReadWriteLock）",
+                                        "note": "",
+                                        "collapsed": false,
+                                        "children": []
+                                      },
+                                      {
+                                        "id": "c8fe20d3-4ec8-42dd-9f2e-79bbef7e411b",
+                                        "text": "信号量（Semaphore）",
+                                        "note": "",
+                                        "collapsed": false,
+                                        "children": []
+                                      },
+                                      {
+                                        "id": "ddafd563-dd2f-43d6-9a35-a32ba97d3132",
+                                        "text": "可过期性信号量（PermitExpirableSemaphore）",
+                                        "note": "",
+                                        "collapsed": false,
+                                        "children": []
+                                      },
+                                      {
+                                        "id": "f446b94d-124c-4ab1-bba3-81b5d863eda0",
+                                        "text": "闭锁（CountDownLatch）",
+                                        "note": "",
+                                        "collapsed": false,
+                                        "children": []
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "id": "a610c789-2a2e-4c29-8740-32a038aba3f3",
+                                    "text": "锁重试和WatchDog机制",
+                                    "note": "",
+                                    "collapsed": false,
+                                    "children": [
+                                      {
+                                        "id": "8155cdc0-c1ff-4ba3-9b1b-252a5e0ac015",
+                                        "text": "利用WatchDog延续锁时间",
+                                        "note": "",
+                                        "collapsed": false,
+                                        "children": []
+                                      },
+                                      {
+                                        "id": "eeb8604a-a418-4f55-991b-fa925910b6a8",
+                                        "text": "利用信号量空值锁重试等待",
+                                        "note": "",
+                                        "collapsed": false,
+                                        "children": []
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "id": "97a48cac-93b8-4ffc-9c63-6519f5385967",
+                    "text": "Redis优化秒杀",
+                    "note": "",
+                    "collapsed": true,
+                    "children": [
+                      {
+                        "id": "26eb6f23-e9b7-44e3-98b4-3aec232a80cf",
+                        "text": "未命名",
+                        "note": "<div>Redis中：</div><ul><li>有优惠券的库存数据，用于判断库存是否充足；</li><li>用一个Redis的 Set 类型存储购买过该优惠券的用户id，用于判断一人一单；</li></ul><div>抢购成功后将优惠券id和user_id封装为订单（VoucherOrder），放入阻塞队列。</div>",
+                        "collapsed": false,
+                        "children": []
+                      },
+                      {
+                        "id": "6c538708-49de-4021-8a0a-62433baebe03",
+                        "text": "思路",
+                        "note": "",
+                        "collapsed": false,
+                        "children": [
+                          {
+                            "id": "9932abfa-47f0-4de8-89b2-0f7555595186",
+                            "text": "①先利用Redis完成库存余量、一人一单判断，完成抢单任务",
+                            "note": "",
+                            "collapsed": false,
+                            "children": []
+                          },
+                          {
+                            "id": "d1dab666-07f6-4f79-9a80-592a7e5a2ce0",
+                            "text": "②再将下单任务放入阻塞队列，利用独立线程异步下单（数据库的操作）",
+                            "note": "",
+                            "collapsed": false,
+                            "children": []
+                          }
+                        ]
+                      },
+                      {
+                        "id": "d9f8eb0e-6ea8-41b2-8e53-fede9ac06f09",
+                        "text": "基于阻塞队列的异步秒杀存在的问题",
+                        "note": "",
+                        "collapsed": true,
+                        "children": [
+                          {
+                            "id": "ee419d4e-fbc0-4295-b652-55e5a5abbf1a",
+                            "text": "使用 JDK 提供的阻塞队列，运行在内存中，存在内存限制问题",
+                            "note": "",
+                            "collapsed": false,
+                            "children": []
+                          },
+                          {
+                            "id": "fcceb026-3f5c-4308-b9ad-962bf117a003",
+                            "text": "数据安全问题",
+                            "note": "",
+                            "collapsed": true,
+                            "children": [
+                              {
+                                "id": "ff251a25-a364-4414-82da-3159ad436056",
+                                "text": "订单信息都在内存中，宕机后丢失",
+                                "note": "",
+                                "collapsed": false,
+                                "children": []
+                              },
+                              {
+                                "id": "9b0adc0b-704d-4ef2-84a7-e0ce40132491",
+                                "text": "订单从阻塞队列取出后就从队列中消失，如果在异步任务中发生事故或异常，该订单将丢失",
+                                "note": "",
+                                "collapsed": false,
+                                "children": []
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "id": "67f6b167-12c4-445a-bd62-890fb2278ac6",
+                        "text": "案例",
+                        "note": "<div>需求：</div><ol><li>新增秒杀优惠券的同时，将优惠券信息保存到Redis中；</li><li>基于 Lua 脚本，判断秒杀库存、一人一单，决定用户是否抢购成功；</li><li>如果抢购成功，将优惠券 id 和用户 id 封装后存入阻塞队列；</li><li>开启线程任务，不断从阻塞队列中获取信息，实现异步下单功能。</li></ol>",
+                        "collapsed": false,
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "id": "c670a000-7923-4136-ba18-3a09c5d7b0da",
+                    "text": "Redis消息队列实现异步秒杀",
+                    "note": "",
+                    "collapsed": false,
+                    "children": [
+                      {
+                        "id": "af8d91cc-6543-4cbd-9893-deb1aaf5899d",
+                        "text": "消息队列（Message Queue）",
+                        "note": "",
+                        "collapsed": false,
+                        "children": [
+                          {
+                            "id": "e64582cc-2cc9-424f-a1eb-323e54a4f2bc",
+                            "text": "消息队列",
+                            "note": "<div>存储和管理消息，也被称为消息代理（Message Broker）<br><br></div>",
+                            "collapsed": false,
+                            "children": []
+                          },
+                          {
+                            "id": "29e944c4-8cf9-4fe9-b06a-d803fbf0c792",
+                            "text": "生产者",
+                            "note": "<div>发送消息到消息队列</div>",
+                            "collapsed": false,
+                            "children": []
+                          },
+                          {
+                            "id": "5f06c2aa-c6e9-4663-b4a7-e8c179d22d0a",
+                            "text": "消费者",
+                            "note": "<div>从消息队列获取消息并处理消息</div>",
+                            "collapsed": false,
+                            "children": []
+                          }
+                        ]
+                      },
+                      {
+                        "id": "16ee06ce-4f34-4e1f-abe6-051fe66f3d33",
+                        "text": "Redis实现消息队列——三种方式",
+                        "note": "",
+                        "collapsed": true,
+                        "children": [
+                          {
+                            "id": "f0fb87cf-a60a-4416-81f5-ebeade31441b",
+                            "text": "list 结构：基于 List 结构模拟消息队列",
+                            "note": "<div>Redis 的 List 数据结构是一个双向链表</div>",
+                            "collapsed": false,
+                            "children": []
+                          },
+                          {
+                            "id": "1fbd221b-be6f-4ca7-9817-9ac628140a4d",
+                            "text": "PubSub：基本的点对点消息模型",
+                            "note": "<div>消费者可以订阅一个或多个 channel，生产者向对应 channel 发送消息后，所有订阅者都能收到相关消息。</div>",
+                            "collapsed": false,
+                            "children": [
+                              {
+                                "id": "002a46f7-6789-4ac5-83ec-d8e739bee622",
+                                "text": "用法",
+                                "note": "",
+                                "collapsed": false,
+                                "children": [
+                                  {
+                                    "id": "261fe2e8-7803-485c-b7ce-737de9ba6180",
+                                    "text": "SUBSCRIBE channel [channel]：订阅一个或多个频道",
+                                    "note": "",
+                                    "collapsed": false,
+                                    "children": []
+                                  },
+                                  {
+                                    "id": "f155033d-327d-4671-a281-f56d6d3b5a3a",
+                                    "text": "PUBLISH channel msg：向一个频道发送消息",
+                                    "note": "",
+                                    "collapsed": false,
+                                    "children": []
+                                  },
+                                  {
+                                    "id": "57aeb1ee-fdb8-4953-b88d-d298627d9026",
+                                    "text": "PSUBSCRIBE pattern[pattern]：订阅与pattern格式匹配的所有频道",
+                                    "note": "",
+                                    "collapsed": false,
+                                    "children": []
+                                  }
+                                ]
+                              },
+                              {
+                                "id": "583eed2d-f0d1-4b77-ab7a-1e37d62a6b28",
+                                "text": "优点",
+                                "note": "",
+                                "collapsed": false,
+                                "children": [
+                                  {
+                                    "id": "badcee82-210a-43f1-b5fe-7261e6c1b0e5",
+                                    "text": "采用发布订阅模型，支持多生产、多消费",
+                                    "note": "",
+                                    "collapsed": false,
+                                    "children": []
+                                  }
+                                ]
+                              },
+                              {
+                                "id": "13ff3f81-1f49-4a00-9c4d-7c7a0a15ad8a",
+                                "text": "缺点",
+                                "note": "",
+                                "collapsed": false,
+                                "children": [
+                                  {
+                                    "id": "833c00f1-7a54-4b6e-87a8-3e48e9a6f9b0",
+                                    "text": "不支持数据持久化",
+                                    "note": "",
+                                    "collapsed": false,
+                                    "children": []
+                                  },
+                                  {
+                                    "id": "967fab52-5d3a-41b3-bee6-ebecef3c8bc7",
+                                    "text": "无法避免消息丢失",
+                                    "note": "",
+                                    "collapsed": false,
+                                    "children": []
+                                  },
+                                  {
+                                    "id": "e68c7d98-bbc8-4a8f-8c70-5aad60f980ad",
+                                    "text": "消息堆积有上限，超出时数据丢失",
+                                    "note": "",
+                                    "collapsed": false,
+                                    "children": []
+                                  }
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "id": "a88a945f-b9b2-4ae1-8997-8fd9967cdc79",
+                            "text": "Stream：比较完善的消息队列模型",
+                            "note": "",
+                            "collapsed": false,
+                            "children": [
+                              {
+                                "id": "4fde7e78-21dc-4fb4-ab6f-0534b5566975",
+                                "text": "未命名",
+                                "note": "",
+                                "collapsed": false,
+                                "children": []
+                              },
+                              {
+                                "id": "2900ca65-c291-4b21-a567-36ff1e50822f",
+                                "text": "未命名",
+                                "note": "",
+                                "collapsed": false,
+                                "children": []
+                              },
+                              {
+                                "id": "c0ca787b-0018-4853-bb7f-71b7e875591c",
+                                "text": "STREAM类型XREAD命令特点",
+                                "note": "",
+                                "collapsed": false,
+                                "children": [
+                                  {
+                                    "id": "1d7a1cf3-0d23-4ddc-9603-33ddc2d0b1c3",
+                                    "text": "消息可回溯",
+                                    "note": "",
+                                    "collapsed": false,
+                                    "children": []
+                                  },
+                                  {
+                                    "id": "9767d57c-f31c-4af7-ba5a-f2f63259de52",
+                                    "text": "一个消息可以被多个消费者读取",
+                                    "note": "",
+                                    "collapsed": false,
+                                    "children": []
+                                  },
+                                  {
+                                    "id": "e73b874b-7a2e-4217-b636-aa96862df0b9",
+                                    "text": "可以阻塞读取",
+                                    "note": "",
+                                    "collapsed": false,
+                                    "children": []
+                                  },
+                                  {
+                                    "id": "43ae3d1f-c54c-4b98-9380-ddfb808d860c",
+                                    "text": "有消息漏读的风险",
+                                    "note": "",
+                                    "collapsed": false,
+                                    "children": []
+                                  }
+                                ]
+                              },
+                              {
+                                "id": "a9e44302-4598-4696-95b3-21cde3eea126",
+                                "text": "消费者组（Gonsumer Group）",
+                                "note": "<div>将多个消费者划分到一个组中，监听同一个队列。</div>",
+                                "collapsed": false,
+                                "children": [
+                                  {
+                                    "id": "bcaf0af0-1e07-4287-8228-c0fd16b12e1b",
+                                    "text": "机制",
+                                    "note": "",
+                                    "collapsed": false,
+                                    "children": [
+                                      {
+                                        "id": "69397dbb-c1a0-4204-a33f-f80266588c2d",
+                                        "text": "消息分流",
+                                        "note": "<div>队列中的消息会分流给组内的不同消费者，而不是重复消费，从而加快消息处理的速度</div>",
+                                        "collapsed": false,
+                                        "children": []
+                                      },
+                                      {
+                                        "id": "226ad31b-b450-46e4-ad17-f30d83d02b25",
+                                        "text": "消息标识",
+                                        "note": "<div>消费者组会维护一个标识，记录最后一个被处理的消息，哪怕消费者宕机重启，还会从标识之后读取消息。确保每一个消息都会被消费</div>",
+                                        "collapsed": false,
+                                        "children": []
+                                      },
+                                      {
+                                        "id": "f38289e6-6ed6-4d8b-a8f3-c59b443a25fa",
+                                        "text": "消息确认",
+                                        "note": "<div>消费者获取消息后，消息处于pending状态，并存入一个pending-list。<br>当处理完成后需要通过XACK来确认消息，标记消息为已处理，才会从pending-list移除。</div>",
+                                        "collapsed": false,
+                                        "children": []
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "id": "52ed7cee-d39f-431a-8d82-5379455f4d8c",
+                                    "text": "操作",
+                                    "note": "",
+                                    "collapsed": false,
+                                    "children": [
+                                      {
+                                        "id": "be5d8ee8-8d57-46b6-8178-cca85b4e0178",
+                                        "text": "未命名",
+                                        "note": "",
+                                        "collapsed": false,
+                                        "children": []
+                                      },
+                                      {
+                                        "id": "6823265a-caf7-4933-9f0d-649b0344d8b3",
+                                        "text": "未命名",
+                                        "note": "",
+                                        "collapsed": false,
+                                        "children": []
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "id": "05ad2610-5c0b-461e-b5c9-b06327273311",
+                                    "text": "STREAM类型消息队列XREADGROUP命令特点",
+                                    "note": "",
+                                    "collapsed": false,
+                                    "children": [
+                                      {
+                                        "id": "20dd0a88-b1d6-4a76-bbdc-501e424727ea",
+                                        "text": "消息可回溯",
+                                        "note": "",
+                                        "collapsed": false,
+                                        "children": []
+                                      },
+                                      {
+                                        "id": "07c3a5bc-6594-4e5c-85d6-8a545e569bad",
+                                        "text": "可以多消费者争抢消息，加快消费速度",
+                                        "note": "",
+                                        "collapsed": false,
+                                        "children": []
+                                      },
+                                      {
+                                        "id": "b469e1d0-d229-4591-bc48-c4ea9c82d51c",
+                                        "text": "可以阻塞读取",
+                                        "note": "",
+                                        "collapsed": false,
+                                        "children": []
+                                      },
+                                      {
+                                        "id": "0b73d7a6-e919-4904-a1ad-8f22b2156422",
+                                        "text": "没有消息漏读的风险",
+                                        "note": "",
+                                        "collapsed": false,
+                                        "children": []
+                                      },
+                                      {
+                                        "id": "57b1e0f1-846f-41a9-af52-f51e16bbc332",
+                                        "text": "有消息确认机制，保证消息至少被消费一次",
+                                        "note": "",
+                                        "collapsed": false,
+                                        "children": []
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "id": "b389e45b-7215-4726-a8fd-484fbefb5f84",
+                            "text": "案例",
+                            "note": "<div>需求：</div><ol><li>创建一个 Stream 类型的消息队列，名为 stream.orders</li><li>修改之前的秒杀下单 Lua 脚本，在认定有抢购资格后，直接向 stream.orders 中添加消息，内容包含 voucherId、userId、orderId</li><li>项目启动时，开启一个线程任务，尝试获取 stream.orders 中的消息，完成下单</li></ol>",
+                            "collapsed": false,
+                            "children": [
+                              {
+                                "id": "8ac3fa7b-27d4-4fd3-b9ec-6f8ef6b473d7",
+                                "text": "未命名",
+                                "note": "",
+                                "collapsed": false,
+                                "children": []
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "654b3083-2265-4d26-ab5a-e2c856f3a83b",
+                "text": "达人探店",
+                "note": "",
+                "collapsed": true,
+                "children": [
+                  {
+                    "id": "2d0b48c8-5c73-4a55-b7ad-16150d1abf5f",
+                    "text": "发布探店笔记",
+                    "note": "<div>探店笔记类似点评网站的评价，往往是图文结合。</div>",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "d7a9ff10-38f3-43bd-96a3-f30ea5a9b445",
+                    "text": "点赞",
+                    "note": "<div>需求：</div><ul><li>同一个用户只能点赞一次，再次点击则取消点赞（一人一赞）</li><li>如果当前用户已经点赞，则点赞按钮高亮显示（前端已实现，判断字段 Blog 类的 isLike 字段）</li></ul><div>实现步骤：</div><ol><li>给 Blog 类中添加一个 isLike 字段，标识是否被当前用户点赞；</li><li>修改点赞功能，利用 Redis 的 set 集合判断是否点赞过，未点赞过则点赞数 +1.已点赞则点赞数 -1；</li><li>修改根据 id 查询 Blog 的业务，判断当前登录用户是否点赞过，赋值给 isLike 字段；</li><li>修改分页查询 Blog 业务，判断当前登录用户是否点赞过，赋值给 isLike 字段。</li></ol>",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "63851a69-7933-4b83-a38b-4182768ac84f",
+                    "text": "点赞排行榜",
+                    "note": "<div>在探店笔记的详情页面，应该把给该笔记点赞的人显示出来，比如最早点赞的TOP5，形成点赞排行榜。<br>需求：</div><ul><li>按照点赞时间先后排序，返回Top5的用户；</li></ul>",
+                    "collapsed": false,
+                    "children": [
+                      {
+                        "id": "d7fa6a2c-9d52-40b9-981c-d45e83242afc",
+                        "text": "未命名",
+                        "note": "",
+                        "collapsed": false,
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "a97d2447-b599-4e82-90b7-2f5dd20179e2",
+                "text": "好友关注",
+                "note": "",
+                "collapsed": true,
+                "children": [
+                  {
+                    "id": "11a4c853-636f-4457-b3f7-88fe06aafc9d",
+                    "text": "关注和取关",
+                    "note": "<div>需求：</div><ol><li>关注和取关接口；</li><li>判断是否关注的接口；</li></ol>",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "694c0d72-e763-432b-b42b-6281e5027bc5",
+                    "text": "共同关注",
+                    "note": "<div>需求：</div><ul><li>利用 Redis 中恰当的数据结构，实现共同关注功能。在博主个人页面展示出当前用户与博主的共同好友。</li></ul>",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "51d871c0-9bf0-49ab-89bc-51ed332a5555",
+                    "text": "关注推送",
+                    "note": "<div>关注推送也叫做 Feed 流，直译为投喂。为用户持续的提供“沉浸式”的体验，通过无限下拉刷新获取新的信息。<br><br>需求：</div><ol><li>修改新增探店笔记的业务，在保存 blog 到数据库的同时，推送到粉丝的收件箱</li><li>收件箱满足可以根据时间戳排序，必须用 Redis 的数据结构实现</li><li>查询收件箱数据时，可以实现分页查询</li></ol>",
+                    "collapsed": false,
+                    "children": [
+                      {
+                        "id": "863fb418-817c-4a30-b15f-e60c60107e9e",
+                        "text": "Feed流的模式",
+                        "note": "",
+                        "collapsed": false,
+                        "children": [
+                          {
+                            "id": "95047f29-842b-48f8-9e13-df0a36bebf63",
+                            "text": "Timeline",
+                            "note": "<div>不做内容筛选，简单的按照内容发布时间排序，常用于好友或关注。例如朋友圈。</div><ul><li>优点：信息全面，不会有缺失。并且实现也相对简单。</li><li>缺点：信息噪声较多，用户不一定感兴趣，内容获取效率低。</li></ul>",
+                            "collapsed": false,
+                            "children": [
+                              {
+                                "id": "bdb286b3-2f1a-4b2b-816f-92ab78e429c5",
+                                "text": "实现方案",
+                                "note": "",
+                                "collapsed": false,
+                                "children": [
+                                  {
+                                    "id": "a7f3b8fb-7ef7-435d-afda-2fd3ecca37d5",
+                                    "text": "拉模式",
+                                    "note": "<div>也叫读扩散。<br><br></div>",
+                                    "collapsed": false,
+                                    "children": []
+                                  },
+                                  {
+                                    "id": "8ad63702-9dbc-4f53-bf30-6d552ebe6ac5",
+                                    "text": "推模式",
+                                    "note": "<div>也叫做写扩散。</div>",
+                                    "collapsed": false,
+                                    "children": []
+                                  },
+                                  {
+                                    "id": "b6e808e6-0203-40d3-85cd-887a21dd1b77",
+                                    "text": "推拉结合",
+                                    "note": "<div>也叫做读写混合，兼具推和拉两种模式的优点。<br>对活跃粉丝用推模式；对普通粉丝用拉模式。</div>",
+                                    "collapsed": false,
+                                    "children": []
+                                  }
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "id": "0d92e954-ef9f-4f5b-9496-81411512ff93",
+                            "text": "智能排序",
+                            "note": "<div>利用只能算法屏蔽掉违规的、用户不感兴趣的内容。推送用户感兴趣的信息来吸引用户。</div><ul><li>优点：投喂用户感兴趣的信息，用户黏度很高，容易沉迷；</li><li>缺点：如果算法不精准，可能起到反作用；</li></ul>",
+                            "collapsed": false,
+                            "children": []
+                          }
+                        ]
+                      },
+                      {
+                        "id": "b0597a86-40f7-4e99-8114-ae75861e15d8",
+                        "text": "Feed流的分页问题",
+                        "note": "<div>Feed 流中的数据会不断更新，所以数据的角标也在变化，因此不能采用传统的分页模式</div>",
+                        "collapsed": false,
+                        "children": [
+                          {
+                            "id": "a70f0279-4aee-4d71-8512-61cde7a728be",
+                            "text": "滚动分页",
+                            "note": "<div>参数：</div><ul><li>max: 当前时间戳 | 上一次查询的最小值</li><li>min: 0</li><li>offset: 0 | 在上一次的结果中，与最小值一样的元素的个数</li><li>count: 3（分页大小）</li></ul>",
+                            "collapsed": false,
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "e32cd8e7-c322-4565-a6ed-0302b0a5e085",
+                "text": "附近商铺",
+                "note": "",
+                "collapsed": true,
+                "children": [
+                  {
+                    "id": "6490e6e9-5157-424b-ba14-bef414f5efed",
+                    "text": "GEO数据结构",
+                    "note": "",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "370f400d-fbeb-402d-93b1-124e69478a82",
+                    "text": "附近商户搜索",
+                    "note": "",
+                    "collapsed": false,
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0d53679f-293f-4b2c-b65b-20a2679cf502",
+                "text": "用户签到",
+                "note": "",
+                "collapsed": true,
+                "children": [
+                  {
+                    "id": "995c584a-1109-4a64-9d19-2ece2fba8173",
+                    "text": "BitMap用法",
+                    "note": "",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "aac5259a-b974-466b-a969-a9bc6d6b6520",
+                    "text": "签到功能",
+                    "note": "",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "700c9840-6849-4d61-9f4c-1091b8ae18df",
+                    "text": "签到统计",
+                    "note": "<ol><li>什么叫连续签到天数？</li><ul><li><span>从最后一次签到开始向前统计，直到遇到第一次未签到为止，计算总的签到 次数，就是连续签到天数；</span></li></ul><li><span>如何得到本月到今天为止的所有签到数据？</span></li><ul><li><span>BITFIELD key GET u[dayOfMonth] 0</span></li></ul><li><span>如何从后向前遍历每个bit位？</span></li><ul><li><span>与1做与运算，就能得到最后一个bit位。</span></li><li>随后右移1位，下一个bit位就成为了最后一个bit位。</li></ul></ol>",
+                    "collapsed": false,
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "32f879c3-f26c-4a89-9bd9-c0d459746f1e",
+                "text": "uv统计",
+                "note": "",
+                "collapsed": true,
+                "children": [
+                  {
+                    "id": "3713f227-1e18-4fee-9ce1-38da74417cdb",
+                    "text": "HyperLogLog用法",
+                    "note": "<div>Hyperloglog（HLL）是从LogLog算法派生的概率算法，用于确定非常大的集合的基数，而不需要存储其所有值。<br>Redis 种的 HLL 是基于 string 结构实现的，单个 HLL 的内存永远小于 16kb，内存占用低。<br>作为代价，其测量结果是概率性的，有小于 0.81% 的误差。</div>",
+                    "collapsed": false,
+                    "children": [
+                      {
+                        "id": "4aac655a-3894-4665-9e11-f8a4766607f8",
+                        "text": "UV",
+                        "note": "<div>全称 Unique Visitor，也叫独立访客量，是指通过互联网访问、浏览这个网页的自然人。<br>1天内同一个用户多次访问，只记录1次。</div>",
+                        "collapsed": false,
+                        "children": []
+                      },
+                      {
+                        "id": "b1541b79-04d1-4db5-800c-deb8a237592c",
+                        "text": "PV",
+                        "note": "<div>全称 Page View，也叫页面访问量或点击量，用户每访问网站的一个页面，记录1次PV，用户多次打开页面，则记录多次PV。<br>往往用来衡量网站的流量。</div>",
+                        "collapsed": false,
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "id": "dbfd6e39-5e2e-41c6-930d-7cfc46bb4890",
+                    "text": "实现UV统计",
+                    "note": "",
+                    "collapsed": false,
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "45a1a912-fefd-4351-beb8-05a4ce646171",
+        "text": "RocketMQ",
+        "note": "",
+        "collapsed": false,
+        "children": [
+          {
+            "id": "nrz1be0td5x",
+            "text": "快速入门：四个角色跑起来",
+            "note": "<p>本地跑通只需要 NameServer + Broker 两个进程。</p>\n<p><strong>启动（Linux / Mac）</strong></p>\n<pre data-lang=\"bash\" class=\"code-block\" spellcheck=\"false\"><code class=\"language-bash\"># 1. 启动 NameServer\nnohup sh bin/mqnamesrv &amp;\ntail -f ~/logs/rocketmqlogs/namesrv.log\n\n# 2. 启动 Broker（指向 NameServer）\nnohup sh bin/mqbroker -n localhost:9876 &amp;\ntail -f ~/logs/rocketmqlogs/broker.log\n</code></pre>\n<p><strong>内存不够时</strong>改 <code>runbroker.sh</code> 里的 <code>-Xms -Xmx</code>（默认 8G，本地改成 512m）。</p>\n<p><strong>控制台（可选）</strong>\n下载 rocketmq-dashboard，改 <code>application.yml</code> 里的 namesrv 地址，访问 8080 可视化看 Topic / 消息 / 消费进度。</p>\n<p><strong>发一条消息验证</strong></p>\n<pre data-lang=\"bash\" class=\"code-block\" spellcheck=\"false\"><code class=\"language-bash\">export NAMESRV_ADDR=localhost:9876\nsh bin/tools.sh org.apache.rocketmq.example.quickstart.Producer\nsh bin/tools.sh org.apache.rocketmq.example.quickstart.Consumer\n</code></pre>\n",
+            "collapsed": false,
+            "children": []
+          },
+          {
+            "id": "n76d0nvqd5x",
+            "text": "核心概念",
+            "note": "",
+            "collapsed": false,
+            "children": [
+              {
+                "id": "n3ii1rkdzm7",
+                "text": "Topic",
+                "note": "<p><b>Topic</b>：一类消息的逻辑集合，比如 <code>order-topic</code>。</p>",
+                "collapsed": false,
+                "children": []
+              },
+              {
+                "id": "n4prjk4k3h8",
+                "text": "Tag",
+                "note": "<p><b>Tag</b>：Topic 下的二级分类，消费端按 Tag 过滤，避免建一堆 Topic。</p><p></p><pre class=\"code-block language-java\" data-lang=\"java\" spellcheck=\"false\"><code class=\"language-java\">// 发送时打 Tag\nMessage msg = new Message(\"order-topic\", \"PAY_SUCCESS\", body);\n// 订阅时只收这个 Tag\nconsumer.subscribe(\"order-topic\", \"PAY_SUCCESS || REFUND\");\n</code></pre><p><br></p>",
+                "collapsed": false,
+                "children": []
+              },
+              {
+                "id": "nb44810n67x",
+                "text": "Queue",
+                "note": "<p><b>Message Queue</b>：Topic 在 Broker 上被切成多个队列（默认 4 个），是并行消费的最小单位。队列数决定最大并发消费线程数。</p>",
+                "collapsed": false,
+                "children": []
+              },
+              {
+                "id": "n55a9itl8ah",
+                "text": "Group",
+                "note": "<p><b>Group</b></p><p></p><ul><li>Producer Group：一批发同类消息的生产者，用于事务消息回查</li><li>Consumer Group：一批消费逻辑相同的消费者，<b>组内分摊，组间广播</b></li></ul><p></p>",
+                "collapsed": false,
+                "children": []
+              }
+            ]
+          },
+          {
+            "id": "njljwhvld5x",
+            "text": "五种消息类型（选型关键）",
+            "note": "<p>这是 RocketMQ 相对 Kafka 的最大差异点，面试和选型都绕不开。</p>\n<table>\n<thead>\n<tr>\n<th>类型</th>\n<th>用途</th>\n<th>关键 API</th>\n</tr>\n</thead>\n<tbody><tr>\n<td>普通消息</td>\n<td>一般异步解耦</td>\n<td><code>syncSend</code> / <code>asyncSend</code> / <code>sendOneWay</code></td>\n</tr>\n<tr>\n<td>顺序消息</td>\n<td>同一订单的创建/支付/发货必须有序</td>\n<td><code>MessageQueueSelector</code> + <code>MessageListenerOrderly</code></td>\n</tr>\n<tr>\n<td>延迟消息</td>\n<td>30 分钟未支付自动取消</td>\n<td><code>delayTimeLevel(3)</code>（4.x 固定 18 级）</td>\n</tr>\n<tr>\n<td>事务消息</td>\n<td>本地事务与发消息的最终一致</td>\n<td><code>sendMessageInTransaction</code></td>\n</tr>\n<tr>\n<td>批量消息</td>\n<td>一次发多条，减少网络往返</td>\n<td><code>send(Collection&lt;Message&gt;)</code>，单批 ≤ 4MB</td>\n</tr>\n</tbody></table>\n<p><br></p>\n",
+            "collapsed": false,
+            "children": [
+              {
+                "id": "nyzfm0lx0u2",
+                "text": "普通消息",
+                "note": "",
+                "collapsed": false,
+                "children": []
+              },
+              {
+                "id": "n8itx1f0lid",
+                "text": "顺序消息",
+                "note": "<p><strong>顺序消息原理：</strong>按业务 key（如 orderId）取模选同一个 Queue，消费端对该 Queue 加锁串行消费。</p>",
+                "collapsed": false,
+                "children": [],
+                "summaries": [],
+                "boundaries": []
+              },
+              {
+                "id": "n2p519fmoaa",
+                "text": "延迟消息",
+                "note": "",
+                "collapsed": false,
+                "children": [],
+                "summaries": [],
+                "boundaries": []
+              },
+              {
+                "id": "n0a31ey1u7l",
+                "text": "事务消息",
+                "note": "",
+                "collapsed": false,
+                "children": [],
+                "summaries": [],
+                "boundaries": []
+              },
+              {
+                "id": "nkzqn707xo9",
+                "text": "批量消息",
+                "note": "",
+                "collapsed": false,
+                "children": [],
+                "summaries": [],
+                "boundaries": []
+              }
+            ]
+          },
+          {
+            "id": "n9rqwsfzd5y",
+            "text": "Spring Boot 集成：三步接入",
+            "note": "<p><strong>1. 引依赖</strong></p>\n<pre data-lang=\"xml\" class=\"code-block language-xml\" spellcheck=\"false\"><code class=\"language-xml\">&lt;dependency&gt;\n  &lt;groupId&gt;org.apache.rocketmq&lt;/groupId&gt;\n  &lt;artifactId&gt;rocketmq-spring-boot-starter&lt;/artifactId&gt;\n  &lt;version&gt;2.3.0&lt;/version&gt;\n&lt;/dependency&gt;\n</code></pre>\n<p><strong>2. 配 application.yml</strong></p>\n<pre data-lang=\"yaml\" class=\"code-block\" spellcheck=\"false\"><code class=\"language-yaml\">rocketmq:\n  name-server: 127.0.0.1:9876\n  producer:\n    group: order-producer-group\n    send-message-timeout: 3000\n</code></pre>\n<p><strong>3. 发消息：注入 RocketMQTemplate</strong></p>\n<pre data-lang=\"java\" class=\"code-block language-java\" spellcheck=\"false\"><code class=\"language-java\">@Autowired\nprivate RocketMQTemplate rocketMQTemplate;\n\n// 同步发送，destination 格式：topic:tag\nrocketMQTemplate.syncSend(\"order-topic:PAY_SUCCESS\", orderDTO);\n\n// 异步发送\nrocketMQTemplate.asyncSend(\"order-topic\", orderDTO, new SendCallback() {\n    public void onSuccess(SendResult r) { log.info(\"ok {}\", r.getMsgId()); }\n    public void onException(Throwable e) { log.error(\"fail\", e); }\n});\n\n// 延迟消息（level 3 = 10s）\nrocketMQTemplate.syncSend(\"order-topic\", MessageBuilder.withPayload(orderDTO)\n    .setHeader(RocketMQHeaders.DELAY_TIME_LEVEL, 3).build());\n</code></pre>\n<p><strong>注意</strong>：<code>RocketMQTemplate</code> 内部封装了 <code>DefaultMQProducer</code>，发送对象会自动 JSON 序列化。</p>\n",
+            "collapsed": false,
+            "children": []
+          },
+          {
+            "id": "ne07b7mnd5y",
+            "text": "消费端：@RocketMQMessageListener",
+            "note": "<p>一个注解搞定监听，不用手写 <code>DefaultMQPushConsumer</code>。</p>\n<pre data-lang=\"java\" class=\"code-block language-java\" spellcheck=\"false\"><code class=\"language-java\">@Component\n@RocketMQMessageListener(\n    topic = \"order-topic\",\n    selectorExpression = \"PAY_SUCCESS\",   // Tag 过滤，默认 *\n    consumerGroup = \"order-consumer-group\",\n    consumeMode = ConsumeMode.CONCURRENTLY, // 或 ORDERLY\n    messageModel = MessageModel.CLUSTERING  // 集群 / BROADCASTING\n)\npublic class OrderPayListener implements RocketMQListener&lt;OrderDTO&gt; {\n    @Override\n    public void onMessage(OrderDTO order) {\n        // 抛异常 = 消费失败，会走重试\n        log.info(\"收到支付成功消息: {}\", order.getOrderId());\n    }\n}\n</code></pre>\n<p><strong>要点</strong></p>\n<ul>\n<li>泛型写 <code>MessageExt</code> 可拿到 msgId / reconsumeTimes 等元信息</li>\n<li>实现 <code>RocketMQListener&lt;String&gt;</code> 时消息体按 String 收，需自己反序列化</li>\n<li><code>consumeMode = ORDERLY</code> 时方法签名要用 <code>RocketMQListener&lt;MessageExt&gt;</code>，且必须返回成功，否则会阻塞队列</li>\n</ul>\n",
+            "collapsed": false,
+            "children": []
+          },
+          {
+            "id": "nyiqjha4d5y",
+            "text": "消费重试与死信队列",
+            "note": "",
+            "collapsed": false,
+            "children": [
+              {
+                "id": "ny0lp5zz3kw",
+                "text": "重试规则",
+                "note": "",
+                "collapsed": false,
+                "children": [
+                  {
+                    "id": "nbc8g7c8v37",
+                    "text": "集群模式",
+                    "note": "<p>消费失败自动重试，默认最多 16 次，间隔递增（10s、30s、1m、2m … 2h）</p>",
+                    "collapsed": false,
+                    "children": [],
+                    "summaries": [],
+                    "boundaries": []
+                  },
+                  {
+                    "id": "nfevbx49xnh",
+                    "text": "广播",
+                    "note": "<p>不重试，失败即丢</p>",
+                    "collapsed": false,
+                    "children": [],
+                    "summaries": [],
+                    "boundaries": []
+                  }
+                ],
+                "summaries": [],
+                "boundaries": []
+              },
+              {
+                "id": "nppi9hzm6pb",
+                "text": "死信队列（DLQ）",
+                "note": "<p>重试 16 次仍失败，消息进入 <code>%DLQ%&nbsp;</code>消费者组名，不再投递。需要人工或定时任务捞出来处理。</p><p></p><pre data-lang=\"java\" class=\"code-block language-java\" spellcheck=\"false\"><code class=\"language-java\">// 控制重试次数：返回 RECONSUME_LATER 并设置次数\n// 或直接在监听里判断\nif (msg.getReconsumeTimes() &gt;= 3) {\n    // 落库 / 告警，然后返回成功，避免进死信\n    return;\n}\n</code></pre><p><br></p>",
+                "collapsed": false,
+                "children": [],
+                "summaries": [],
+                "boundaries": []
+              },
+              {
+                "id": "nhd3pu6okq5",
+                "text": "幂等",
+                "note": "<p>RocketMQ 保证 At Least Once，重复消费不可避免。用业务唯一键（订单号 + 状态）做去重表或 Redis SETNX。</p>",
+                "collapsed": false,
+                "children": [],
+                "summaries": [],
+                "boundaries": []
+              }
+            ]
+          },
+          {
+            "id": "n41oyfb9d5y",
+            "text": "事务消息：解决本地事务与发消息的一致性",
+            "note": "<p><strong>痛点</strong>：先写库再发消息，发消息失败 → 数据不一致；先发消息再写库，写库失败 → 下游收到脏消息。</p>\n<p><strong>两阶段流程</strong></p>\n<ol>\n<li>Producer 发「半消息」到 Broker，此时对消费者不可见</li>\n<li>Broker 返回成功，Producer 执行本地事务</li>\n<li>本地事务成功 → <code>commit</code>，消息可见；失败 → <code>rollback</code>，消息删除</li>\n<li>若第 3 步没响应（宕机/超时），Broker 定时<strong>回查</strong> Producer 的本地事务状态</li>\n</ol>\n<pre data-lang=\"java\" class=\"code-block language-java\" spellcheck=\"false\"><code class=\"language-java\">rocketMQTemplate.sendMessageInTransaction(\n    \"tx-producer-group\",\n    \"order-topic\",\n    MessageBuilder.withPayload(order).build(),\n    null\n);\n\n@RocketMQTransactionListener\npublic class OrderTxListener implements RocketMQLocalTransactionListener {\n    @Override\n    public RocketMQLocalTransactionState executeLocalTransaction(Message msg, Object arg) {\n        try { orderService.createOrder(msg); return COMMIT; }\n        catch (Exception e) { return ROLLBACK; }\n    }\n    @Override\n    public RocketMQLocalTransactionState checkLocalTransaction(Message msg) {\n        return orderService.exists(msg) ? COMMIT : ROLLBACK;\n    }\n}\n</code></pre>\n<p><strong>注意</strong>：回查默认最多 15 次，超过则回滚。回查逻辑必须幂等且能查到结果。</p>\n",
+            "collapsed": false,
+            "children": []
+          },
+          {
+            "id": "nzfrs74md5y",
+            "text": "消息存储与高可用",
+            "note": "",
+            "collapsed": false,
+            "children": [
+              {
+                "id": "nqejj16wn51",
+                "text": "存储结构",
+                "note": "",
+                "collapsed": false,
+                "children": [
+                  {
+                    "id": "njvfhixqh70",
+                    "text": "CommitLog",
+                    "note": "<p>所有消息顺序追加写同一个文件，顺序写盘所以快</p>",
+                    "collapsed": false,
+                    "children": [],
+                    "summaries": [],
+                    "boundaries": []
+                  },
+                  {
+                    "id": "nt4tubh7mbw",
+                    "text": "ConsumeQueue",
+                    "note": "<p>每个 Queue 一个索引文件，存 offset + size + tag hash，消费时先查它再回 CommitLog 取消息</p>",
+                    "collapsed": false,
+                    "children": [],
+                    "summaries": [],
+                    "boundaries": []
+                  },
+                  {
+                    "id": "n2cjw2haqz1",
+                    "text": "IndexFile",
+                    "note": "<p>按 msgId / key 建哈希索引，用于消息查询</p>",
+                    "collapsed": false,
+                    "children": [],
+                    "summaries": [],
+                    "boundaries": []
+                  }
+                ],
+                "summaries": [],
+                "boundaries": []
+              },
+              {
+                "id": "n5g2vu9d16h",
+                "text": "刷盘",
+                "note": "",
+                "collapsed": false,
+                "children": [
+                  {
+                    "id": "ngc141dz7gy",
+                    "text": "同步刷盘",
+                    "note": "<p>写完盘才返回 ACK，不丢消息，TPS 低</p>",
+                    "collapsed": false,
+                    "children": [],
+                    "summaries": [],
+                    "boundaries": []
+                  },
+                  {
+                    "id": "n6batkdq9oz",
+                    "text": "异步刷盘",
+                    "note": "<p>写 PageCache 就返回，靠后台线程刷盘（默认）</p>",
+                    "collapsed": false,
+                    "children": [],
+                    "summaries": [],
+                    "boundaries": []
+                  }
+                ],
+                "summaries": [],
+                "boundaries": []
+              },
+              {
+                "id": "n7dfofv4wq9",
+                "text": "高可用",
+                "note": "",
+                "collapsed": false,
+                "children": [
+                  {
+                    "id": "nglnqgyg7dg",
+                    "text": "4.x",
+                    "note": "<p>主从复制，主挂了从可读不可写，需人工切换</p>",
+                    "collapsed": false,
+                    "children": [],
+                    "summaries": [],
+                    "boundaries": []
+                  },
+                  {
+                    "id": "nyo6f2cede3",
+                    "text": "5.x",
+                    "note": "<p>DLedger / Controller 模式支持自动主从切换</p>",
+                    "collapsed": false,
+                    "children": [],
+                    "summaries": [],
+                    "boundaries": []
+                  }
+                ],
+                "summaries": [],
+                "boundaries": []
+              },
+              {
+                "id": "n5toi0ugzos",
+                "text": "NameServer 无状态",
+                "note": "<p>节点间不通信，Broker 每 30s 向所有 NameServer 心跳注册，客户端定时拉取路由。</p>",
+                "collapsed": false,
+                "children": [],
+                "summaries": [],
+                "boundaries": []
+              }
+            ]
+          },
+          {
+            "id": "nj7i1zdkd5y",
+            "text": "常见踩坑清单",
+            "note": "",
+            "collapsed": false,
+            "children": [
+              {
+                "id": "n1wjg4ujtek",
+                "text": "消息发不出去",
+                "note": "<p></p><ul><li>检查 <code>name-server</code> 地址是否带端口 9876</li><li>Broker 的 <code style=\"letter-spacing: 0px;\">brokerIP1</code><span style=\"letter-spacing: 0px;\"> 若为内网 IP，跨网访问需显式配置公网 IP</span></li></ul><p></p>",
+                "collapsed": false,
+                "children": [],
+                "summaries": [],
+                "boundaries": []
+              },
+              {
+                "id": "n9f4w7bkzxk",
+                "text": "消费不到消息",
+                "note": "<p></p><ul><li>Topic 不存在：4.x 默认 <code>autoCreateTopicEnable=true</code>，生产建议关闭并手工建 Topic</li><li>Tag 写错：<code>selectorExpression</code> 必须与发送时的 Tag 完全一致</li><li>消费组名冲突：不同业务别复用同一个 group</li></ul><p></p>",
+                "collapsed": false,
+                "children": [],
+                "summaries": [],
+                "boundaries": []
+              },
+              {
+                "id": "n0gb8bxm5ia",
+                "text": "消息积压",
+                "note": "<p></p><ul><li>增加消费者实例（不超过 Queue 总数，否则多出来的实例空转）</li><li>或临时扩 Queue 数 + 提高消费线程数 <code>consumeThreadMax</code></li></ul><p></p>",
+                "collapsed": false,
+                "children": [],
+                "summaries": [],
+                "boundaries": []
+              },
+              {
+                "id": "ne9smsovalb",
+                "text": "顺序消息失效",
+                "note": "<p></p><ul><li>发送端没用 <code>MessageQueueSelector</code> 按业务 key 选队列</li><li>消费端用了 <code>CONCURRENTLY</code> 模式</li></ul><p></p>",
+                "collapsed": false,
+                "children": [],
+                "summaries": [],
+                "boundaries": []
+              },
+              {
+                "id": "n75pdc45o1n",
+                "text": "消息体过大",
+                "note": "<p>默认上限 4MB，大文件走 OSS 传地址，别塞消息体</p>",
+                "collapsed": false,
+                "children": [],
+                "summaries": [],
+                "boundaries": []
+              }
+            ]
+          },
+          {
+            "id": "nnqrhs4vd5y",
+            "text": "与 Kafka 怎么选",
+            "note": "<table>\n<thead>\n<tr>\n<th>维度</th>\n<th>RocketMQ</th>\n<th>Kafka</th>\n</tr>\n</thead>\n<tbody><tr>\n<td>定位</td>\n<td>业务消息</td>\n<td>日志/流式数据管道</td>\n</tr>\n<tr>\n<td>延迟消息</td>\n<td>原生支持</td>\n<td>不支持，需自研</td>\n</tr>\n<tr>\n<td>事务消息</td>\n<td>原生支持</td>\n<td>只支持流处理事务</td>\n</tr>\n<tr>\n<td>消息回溯</td>\n<td>支持按时间回溯</td>\n<td>支持按 offset</td>\n</tr>\n<tr>\n<td>单机吞吐</td>\n<td>十万级</td>\n<td>百万级</td>\n</tr>\n<tr>\n<td>注册中心</td>\n<td>自研 NameServer</td>\n<td>ZooKeeper / KRaft</td>\n</tr>\n<tr>\n<td>消息过滤</td>\n<td>Tag / SQL92 过滤</td>\n<td>需自行处理</td>\n</tr>\n<tr>\n<td>运维</td>\n<td>国内文档多、控制台完善</td>\n<td>生态大、云厂商支持好</td>\n</tr>\n</tbody></table>\n<p><strong>一句话</strong>：日志采集、大数据管道选 Kafka；电商订单、支付、需要延迟/事务的业务消息选 RocketMQ。</p>\n",
+            "collapsed": false,
+            "children": []
+          }
+        ]
+      },
+      {
+        "id": "22c6c570-41fb-47cb-ba38-f6603dc29451",
+        "text": "分支主题 4",
+        "note": "",
+        "collapsed": false,
+        "children": []
+      }
+    ]
+  },
+  "createdAt": 1793978048615,
+  "updatedAt": 1794238324351
+}

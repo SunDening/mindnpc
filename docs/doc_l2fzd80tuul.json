@@ -1,0 +1,38 @@
+{
+  "id": "doc_l2fzd80tuul",
+  "app": "MindNPC",
+  "version": 1,
+  "title": "微服务架构",
+  "layout": "both",
+  "root": {
+    "id": "n9lsx5reuul",
+    "text": "微服务架构",
+    "note": "",
+    "collapsed": false,
+    "children": [
+      {
+        "id": "nkkwenpzcij",
+        "text": "代码结构",
+        "note": "",
+        "collapsed": false,
+        "children": [
+          {
+            "id": "nr38be26fru",
+            "text": "domain",
+            "note": "<p>业务领域层，范围比 entity 大得多，常见包含：</p><p></p><ul><li><b>Entity（实体）</b>：有唯一标识，有生命周期和行为的业务对象；</li><li><b>Value Object（值对象）</b>：无标识、不可变，如 Money、Address</li><li><b>Aggregate / Aggregate Root（聚合根）</b>：一致性边界</li><li><b>Domain Service（领域服务）</b>：跨实体的业务逻辑</li><li><b>Repository 接口</b>：领域层定义的持久化对象</li><li><b>Domain Event（领域事件）</b></li><li><b>枚举、常量、领域异常</b>等</li></ul><p></p>",
+            "collapsed": false,
+            "children": [],
+            "summaries": [],
+            "boundaries": []
+          }
+        ],
+        "summaries": [],
+        "boundaries": []
+      }
+    ],
+    "summaries": [],
+    "boundaries": []
+  },
+  "createdAt": 1794296534637,
+  "updatedAt": 1794296777792
+}

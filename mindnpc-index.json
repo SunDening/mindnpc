@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": 1794238958802,
+  "updatedAt": 1794295598100,
   "docs": {
     "doc_g22x195f5bj": {
       "id": "doc_g22x195f5bj",
@@ -25,6 +25,12 @@
       "title": "中间件",
       "size": 147447,
       "updatedAt": 1794238958802
+    },
+    "doc_fm8vrc36wni": {
+      "id": "doc_fm8vrc36wni",
+      "title": "设计模式",
+      "size": 8710,
+      "updatedAt": 1794295598100
     }
   }
 }
